@@ -5,6 +5,7 @@
 #include <proc.h>
 #include <stdio.h>
 
+#include <lab0.h>
 /*------------------------------------------------------------------------
  *  setnok  -  set next-of-kin (notified at death) for a given process
  *------------------------------------------------------------------------
@@ -22,5 +23,8 @@ SYSCALL	setnok(int nok, int pid)
 	pptr = &proctab[pid];
 	pptr->pnxtkin = nok;
 	restore(ps);
+	if(sys_trace){
+		sys_frequency[SYS_SETNOK][currpid]++;
+	}
 	return(OK);
 }

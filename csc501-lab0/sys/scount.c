@@ -4,6 +4,7 @@
 #include <kernel.h>
 #include <sem.h>
 
+#include <lab0.h>
 /*------------------------------------------------------------------------
  *  scount  --  return a semaphore count
  *------------------------------------------------------------------------
@@ -14,5 +15,8 @@ extern	struct	sentry	semaph[];
 
 	if (isbadsem(sem) || semaph[sem].sstate==SFREE)
 		return(SYSERR);
+	if(sys_trace){
+		sys_frequency[SYS_SCOUNT][currpid]++;
+	}
 	return(semaph[sem].semcnt);
 }

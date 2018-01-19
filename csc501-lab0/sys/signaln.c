@@ -7,6 +7,7 @@
 #include <sem.h>
 #include <stdio.h>
 
+#include <lab0.h>
 /*------------------------------------------------------------------------
  *  signaln -- signal a semaphore n times
  *------------------------------------------------------------------------
@@ -27,5 +28,8 @@ SYSCALL signaln(int sem, int count)
 			ready(getfirst(sptr->sqhead), RESCHNO);
 	resched();
 	restore(ps);
+	if(sys_trace){
+		sys_frequency[SYS_SIGNALN][currpid]++;
+	}
 	return(OK);
 }

@@ -5,6 +5,7 @@
 #include <proc.h>
 #include <stdio.h>
 
+#include <lab0.h>
 /*------------------------------------------------------------------------
  * resume  --  unsuspend a process, making it ready; return the priority
  *------------------------------------------------------------------------
@@ -23,5 +24,9 @@ SYSCALL resume(int pid)
 	prio = pptr->pprio;
 	ready(pid, RESCHYES);
 	restore(ps);
+
+	if(sys_trace){
+		sys_frequency[SYS_RESUME][currpid]++;
+	}
 	return(prio);
 }

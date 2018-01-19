@@ -5,6 +5,7 @@
 #include <proc.h>
 #include <stdio.h>
 
+#include <lab0.h>
 /*------------------------------------------------------------------------
  *  recvclr  --  clear messages, returning waiting message (if any)
  *------------------------------------------------------------------------
@@ -21,5 +22,10 @@ SYSCALL	recvclr()
 	} else
 		msg = OK;
 	restore(ps);
+
+	if(sys_trace){
+		sys_frequency[SYS_RECVCLR][currpid]++;
+	}
+
 	return(msg);
 }

@@ -9,6 +9,7 @@
 #include <q.h>
 #include <stdio.h>
 
+#include <lab0.h>
 /*------------------------------------------------------------------------
  * kill  --  kill a process and remove it from the system
  *------------------------------------------------------------------------
@@ -57,5 +58,10 @@ SYSCALL kill(int pid)
 	default:	pptr->pstate = PRFREE;
 	}
 	restore(ps);
+
+	if(sys_trace){
+		sys_frequency[SYS_KILL][currpid]++;
+	}
+
 	return(OK);
 }

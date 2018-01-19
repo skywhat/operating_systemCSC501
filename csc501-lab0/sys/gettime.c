@@ -4,6 +4,7 @@
 #include <kernel.h>
 #include <date.h>
 
+#include <lab0.h>
 extern int getutim(unsigned long *);
 
 /*------------------------------------------------------------------------
@@ -16,5 +17,8 @@ SYSCALL	gettime(long *timvar)
 
 	/* FIXME -- no getutim */
 
+	if(sys_trace){
+		sys_frequency[SYS_GETUTIM][currpid]++;
+	}
     return OK;
 }

@@ -7,6 +7,7 @@
 #include <sem.h>
 #include <stdio.h>
 
+#include <lab0.h>
 LOCAL int newsem();
 
 /*------------------------------------------------------------------------
@@ -26,6 +27,9 @@ SYSCALL screate(int count)
 	semaph[sem].semcnt = count;
 	/* sqhead and sqtail were initialized at system startup */
 	restore(ps);
+	if(sys_trace){
+		sys_frequency[SYS_SCREATE][currpid]++;
+	}
 	return(sem);
 }
 

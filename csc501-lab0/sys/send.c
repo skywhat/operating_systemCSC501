@@ -5,6 +5,7 @@
 #include <proc.h>
 #include <stdio.h>
 
+#include <lab0.h>
 /*------------------------------------------------------------------------
  *  send  --  send a message to another process
  *------------------------------------------------------------------------
@@ -29,5 +30,8 @@ SYSCALL	send(int pid, WORD msg)
 		ready(pid, RESCHYES);
 	}
 	restore(ps);
+	if(sys_trace){
+		sys_frequency[SYS_SEND][currpid]++;
+	}
 	return(OK);
 }

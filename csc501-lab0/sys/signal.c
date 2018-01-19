@@ -7,6 +7,7 @@
 #include <sem.h>
 #include <stdio.h>
 
+#include <lab0.h>
 /*------------------------------------------------------------------------
  * signal  --  signal a semaphore, releasing one waiting process
  *------------------------------------------------------------------------
@@ -24,5 +25,8 @@ SYSCALL signal(int sem)
 	if ((sptr->semcnt++) < 0)
 		ready(getfirst(sptr->sqhead), RESCHYES);
 	restore(ps);
+	if(sys_trace){
+		sys_frequency[SYS_SIGNAL][currpid]++;
+	}
 	return(OK);
 }

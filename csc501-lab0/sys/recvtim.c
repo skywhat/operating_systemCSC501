@@ -7,6 +7,7 @@
 #include <sleep.h>
 #include <stdio.h>
 
+#include <lab0.h>
 /*------------------------------------------------------------------------
  *  recvtim  -  wait to receive a message or timeout and return result
  *------------------------------------------------------------------------
@@ -35,5 +36,9 @@ SYSCALL	recvtim(int maxwait)
 		msg = TIMEOUT;
 	}
 	restore(ps);
+
+	if(sys_trace){
+		sys_frequency[SYS_RECVTIM][currpid]++;
+	}
 	return(msg);
 }

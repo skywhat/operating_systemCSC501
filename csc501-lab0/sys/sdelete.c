@@ -7,6 +7,7 @@
 #include <sem.h>
 #include <stdio.h>
 
+#include <lab0.h>
 /*------------------------------------------------------------------------
  * sdelete  --  delete a semaphore by releasing its table entry
  *------------------------------------------------------------------------
@@ -33,5 +34,10 @@ SYSCALL sdelete(int sem)
 		resched();
 	}
 	restore(ps);
+
+	if(sys_trace){
+		sys_frequency[SYS_SDELETE][currpid]++;
+	}
+
 	return(OK);
 }
