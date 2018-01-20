@@ -7,6 +7,8 @@
 #include <sleep.h>
 #include <stdio.h>
 
+#include <lab0.h>
+
 /*------------------------------------------------------------------------
  * sleep100  --  delay the caller for a time specified in 1/100 of seconds
  *------------------------------------------------------------------------

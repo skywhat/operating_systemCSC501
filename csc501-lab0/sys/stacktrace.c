@@ -5,6 +5,9 @@
 #include <proc.h>
 #include <stdio.h>
 
+#include <lab0.h>
+
+
 static unsigned long	*esp;
 static unsigned long	*ebp;
 

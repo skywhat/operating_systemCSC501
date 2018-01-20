@@ -7,6 +7,9 @@
 #include <sleep.h>
 #include <stdio.h>
 
+
+#include <lab0.h>
+
 /*------------------------------------------------------------------------
  * unsleep  --  remove  process from the sleep queue prematurely
  *------------------------------------------------------------------------

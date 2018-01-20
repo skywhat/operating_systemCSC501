@@ -7,6 +7,8 @@
 #include <sleep.h>
 #include <stdio.h>
 
+#include <lab0.h>
+
 /*------------------------------------------------------------------------
  * sleep10  --  delay the caller for a time specified in tenths of seconds
  *------------------------------------------------------------------------
