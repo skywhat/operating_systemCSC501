@@ -1,9 +1,8 @@
 #ifndef _LAB0_H_
 #define _LAB0_H_
-
+#include <proc.h>
 #define NSYSCALL 27 /* set the number of system call*/
 /* 27 system calls */
-
 /*
 #define SYS_FREEMEM 0
 #define SYS_CHPRIO 1
@@ -64,12 +63,12 @@ enum{
 	SYS_WAIT
 };
 
-
-extern int sys_frequency[NSYSCALL][NPROC];
-extern int sys_time[NSYSCALL][NPROC];
+extern unsigned long start_time;
+extern sys_frequency[NSYSCALL][NPROC];
+extern unsigned long sys_time[NSYSCALL][NPROC];
 extern Bool sys_call[NPROC];
 extern Bool sys_trace;
-extern int ctr1000;
+extern unsigned long ctr1000;
 
 
 #endif

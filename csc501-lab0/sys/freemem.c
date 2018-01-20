@@ -17,7 +17,7 @@ SYSCALL	freemem(struct mblock *block, unsigned size)
 	if(sys_trace){
 		sys_frequency[SYS_FREEMEM][currpid]++;
 		sys_call[currpid]=TRUE;
-		int start_time=ctr1000;
+		start_time=ctr1000;
 	}
 
 	STATWORD ps;

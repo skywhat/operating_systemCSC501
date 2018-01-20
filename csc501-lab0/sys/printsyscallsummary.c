@@ -6,10 +6,10 @@
 #include<lab0.h>
 
 Bool sys_trace=FALSE;/*trace or not*/
-
+unsigned long start_time;
 /*27 system calls*/
 int sys_frequency[NSYSCALL][NPROC];
-int sys_time[NSYSCALL][NPROC];
+unsigned long sys_time[NSYSCALL][NPROC];
 Bool sys_call[NPROC];/* called or not*/
 
 char syscall_name[NSYSCALL][20]={
