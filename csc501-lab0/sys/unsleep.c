@@ -13,7 +13,15 @@
  */
 SYSCALL	unsleep(int pid)
 {
-	STATWORD ps;    
+
+	/*modified*/
+	if(sys_trace){
+		sys_frequency[SYS_UNSLEEP][currpid]++;
+		sys_call[currpid]=TRUE;
+		int start_time=ctr1000;
+	}
+
+	STATWORD ps;
 	struct	pentry	*pptr;
 	struct	qent	*qptr;
 	int	remain;
@@ -24,6 +32,10 @@ SYSCALL	unsleep(int pid)
 	    ( (pptr = &proctab[pid])->pstate != PRSLEEP &&
 	     pptr->pstate != PRTRECV) ) {
 		restore(ps);
+		/* execution time */
+		if(sys_trace){
+			sys_time[SYS_UNSLEEP][currpid]+=ctr1000-start_time;
+		}
 		return(SYSERR);
 	}
 	qptr = &q[pid];
@@ -36,5 +48,9 @@ SYSCALL	unsleep(int pid)
 	else
 		slnempty = FALSE;
         restore(ps);
+				/* execution time */
+	if(sys_trace){
+			sys_time[SYS_UNSLEEP][currpid]+=ctr1000-start_time;
+	}
 	return(OK);
 }

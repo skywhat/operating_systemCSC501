@@ -12,21 +12,36 @@
  */
 SYSCALL resume(int pid)
 {
-	STATWORD ps;    
+
+	/*modified*/
+	if(sys_trace){
+		sys_frequency[SYS_RESUME][currpid]++;
+		sys_call[currpid]=TRUE;
+		int start_time=ctr1000;
+	}
+
+	STATWORD ps;
 	struct	pentry	*pptr;		/* pointer to proc. tab. entry	*/
 	int	prio;			/* priority to return		*/
 
 	disable(ps);
 	if (isbadpid(pid) || (pptr= &proctab[pid])->pstate!=PRSUSP) {
 		restore(ps);
+		/* execution time */
+		if(sys_trace){
+			sys_time[SYS_RESUME][currpid]+=ctr1000-start_time;
+		}
+
 		return(SYSERR);
 	}
 	prio = pptr->pprio;
 	ready(pid, RESCHYES);
 	restore(ps);
 
+	/* execution time */
 	if(sys_trace){
-		sys_frequency[SYS_RESUME][currpid]++;
+		sys_time[SYS_RESUME][currpid]+=ctr1000-start_time;
 	}
+
 	return(prio);
 }

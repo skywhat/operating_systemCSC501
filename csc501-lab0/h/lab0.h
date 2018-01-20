@@ -66,8 +66,8 @@ enum{
 
 extern int sys_frequency[NSYSCALL][NPROC];
 extern int sys_time[NSYSCALL][NPROC];
-extern int sys_call[NPROC];
-extern bool sys_trace;
+extern Bool sys_call[NPROC];
+extern Bool sys_trace;
 extern int ctr1000;
 
 

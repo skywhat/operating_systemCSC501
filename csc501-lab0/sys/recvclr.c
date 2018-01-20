@@ -12,7 +12,15 @@
  */
 SYSCALL	recvclr()
 {
-	STATWORD ps;    
+
+	/*modified*/
+	if(sys_trace){
+		sys_frequency[SYS_FREEMEM][currpid]++;
+		sys_call[currpid]=TRUE;
+		int start_time=ctr1000;
+	}
+
+	STATWORD ps;
 	WORD	msg;
 
 	disable(ps);
@@ -23,9 +31,9 @@ SYSCALL	recvclr()
 		msg = OK;
 	restore(ps);
 
+	/* execution time */
 	if(sys_trace){
-		sys_frequency[SYS_RECVCLR][currpid]++;
+		sys_time[SYS_FREEMEM][currpid]+=ctr1000-start_time;
 	}
-
 	return(msg);
 }

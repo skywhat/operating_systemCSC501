@@ -12,7 +12,13 @@
  */
 SYSCALL	suspend(int pid)
 {
-	STATWORD ps;    
+	/*modified*/
+	if(sys_trace){
+		sys_frequency[SYS_SUSPEND][currpid]++;
+		sys_call[currpid]=TRUE;
+		int start_time=ctr1000;
+	}
+	STATWORD ps;
 	struct	pentry	*pptr;		/* pointer to proc. tab. entry	*/
 	int	prio;			/* priority returned		*/
 
@@ -20,6 +26,10 @@ SYSCALL	suspend(int pid)
 	if (isbadpid(pid) || pid==NULLPROC ||
 	 ((pptr= &proctab[pid])->pstate!=PRCURR && pptr->pstate!=PRREADY)) {
 		restore(ps);
+		/* execution time */
+		if(sys_trace){
+			sys_time[SYS_SUSPEND][currpid]+=ctr1000-start_time;
+		}
 		return(SYSERR);
 	}
 	if (pptr->pstate == PRREADY) {
@@ -32,5 +42,9 @@ SYSCALL	suspend(int pid)
 	}
 	prio = pptr->pprio;
 	restore(ps);
+	/* execution time */
+	if(sys_trace){
+		sys_time[SYS_SUSPEND][currpid]+=ctr1000-start_time;
+	}
 	return(prio);
 }

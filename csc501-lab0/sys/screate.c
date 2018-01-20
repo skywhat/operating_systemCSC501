@@ -16,19 +16,33 @@ LOCAL int newsem();
  */
 SYSCALL screate(int count)
 {
-	STATWORD ps;    
+
+	/*modified*/
+	if(sys_trace){
+		sys_frequency[SYS_SCREATE][currpid]++;
+		sys_call[currpid]=TRUE;
+		int start_time=ctr1000;
+	}
+
+
+	STATWORD ps;
 	int	sem;
 
 	disable(ps);
 	if ( count<0 || (sem=newsem())==SYSERR ) {
 		restore(ps);
+		/* execution time */
+		if(sys_trace){
+			sys_time[SYS_SCREATE][currpid]+=ctr1000-start_time;
+		}
 		return(SYSERR);
 	}
 	semaph[sem].semcnt = count;
 	/* sqhead and sqtail were initialized at system startup */
 	restore(ps);
+	/* execution time */
 	if(sys_trace){
-		sys_frequency[SYS_SCREATE][currpid]++;
+		sys_time[SYS_SCREATE][currpid]+=ctr1000-start_time;
 	}
 	return(sem);
 }

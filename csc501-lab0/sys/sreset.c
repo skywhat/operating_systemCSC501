@@ -13,7 +13,14 @@
  */
 SYSCALL sreset(int sem, int count)
 {
-	STATWORD ps;    
+	/*modified*/
+	if(sys_trace){
+		sys_frequency[SYS_SRESET][currpid]++;
+		sys_call[currpid]=TRUE;
+		int start_time=ctr1000;
+	}
+
+	STATWORD ps;
 	struct	sentry	*sptr;
 	int	pid;
 	int	slist;
@@ -21,6 +28,10 @@ SYSCALL sreset(int sem, int count)
 	disable(ps);
 	if (isbadsem(sem) || count<0 || semaph[sem].sstate==SFREE) {
 		restore(ps);
+		/* execution time */
+		if(sys_trace){
+			sys_time[SYS_SRESET][currpid]+=ctr1000-start_time;
+		}
 		return(SYSERR);
 	}
 	sptr = &semaph[sem];
@@ -30,5 +41,9 @@ SYSCALL sreset(int sem, int count)
 	sptr->semcnt = count;
 	resched();
 	restore(ps);
+	/* execution time */
+	if(sys_trace){
+		sys_time[SYS_SRESET][currpid]+=ctr1000-start_time;
+	}
 	return(OK);
 }

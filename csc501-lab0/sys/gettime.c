@@ -13,12 +13,19 @@ extern int getutim(unsigned long *);
  */
 SYSCALL	gettime(long *timvar)
 {
+	/*modified*/
+	if(sys_trace){
+		sys_frequency[SYS_GETTIME][currpid]++;
+		sys_call[currpid]=TRUE;
+		int start_time=ctr1000;
+	}
     /* long	now; */
 
 	/* FIXME -- no getutim */
 
+	/* execution time */
 	if(sys_trace){
-		sys_frequency[SYS_GETUTIM][currpid]++;
+		sys_time[SYS_GETTIME][currpid]+=ctr1000-start_time;
 	}
     return OK;
 }

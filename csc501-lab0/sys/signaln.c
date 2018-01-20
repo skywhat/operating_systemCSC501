@@ -14,12 +14,25 @@
  */
 SYSCALL signaln(int sem, int count)
 {
-	STATWORD ps;    
+
+	/*modified*/
+	if(sys_trace){
+		sys_frequency[SYS_SIGNALN][currpid]++;
+		sys_call[currpid]=TRUE;
+		int start_time=ctr1000;
+	}
+
+
+	STATWORD ps;
 	struct	sentry	*sptr;
 
 	disable(ps);
 	if (isbadsem(sem) || semaph[sem].sstate==SFREE || count<=0) {
 		restore(ps);
+		/* execution time */
+		if(sys_trace){
+			sys_time[SYS_SIGNALN][currpid]+=ctr1000-start_time;
+		}
 		return(SYSERR);
 	}
 	sptr = &semaph[sem];
@@ -28,8 +41,9 @@ SYSCALL signaln(int sem, int count)
 			ready(getfirst(sptr->sqhead), RESCHNO);
 	resched();
 	restore(ps);
+	/* execution time */
 	if(sys_trace){
-		sys_frequency[SYS_SIGNALN][currpid]++;
+		sys_time[SYS_SIGNALN][currpid]+=ctr1000-start_time;
 	}
 	return(OK);
 }

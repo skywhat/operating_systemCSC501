@@ -13,10 +13,23 @@
  */
 SYSCALL sleep1000(int n)
 {
-	STATWORD ps;    
 
-	if (n < 0  || clkruns==0)
+	/*modified*/
+	if(sys_trace){
+		sys_frequency[SYS_SLEEP1000][currpid]++;
+		sys_call[currpid]=TRUE;
+		int start_time=ctr1000;
+	}
+
+	STATWORD ps;
+
+	if (n < 0  || clkruns==0){
+		/* execution time */
+		if(sys_trace){
+			sys_time[SYS_SLEEP1000][currpid]+=ctr1000-start_time;
+		}
 	         return(SYSERR);
+				 }
 	disable(ps);
 	if (n == 0) {		/* sleep1000(0) -> end time slice */
 	        ;
@@ -28,5 +41,9 @@ SYSCALL sleep1000(int n)
 	}
 	resched();
         restore(ps);
+				/* execution time */
+				if(sys_trace){
+					sys_time[SYS_SLEEP1000][currpid]+=ctr1000-start_time;
+				}
 	return(OK);
 }

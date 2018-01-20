@@ -5,33 +5,53 @@
 
 #include<lab0.h>
 
-bool sys_trace=false;
+Bool sys_trace=FALSE;/*trace or not*/
 
-#define NSYSCALL 27 /* set the number of system call*/ 
+#define NSYSCALL 27 /* set the number of system call*/
 /*27 system calls*/
-int sys_frequence[NSYSCALL][NPROC];
+int sys_frequency[NSYSCALL][NPROC];
 int sys_time[NSYSCALL][NPROC];
-bool sys_call[NPROC];
+Bool sys_call[NPROC];/* called or not*/
+
+char syscall_name[NSYSCALL][20]={
+	"sys_freemem","sys_chprio","sys_getpid","sys_getprio","sys_gettime","sys_kill",
+	"sys_receive","sys_recvclr","sys_recvtim","sys_resume","sys_scount","sys_sdelete",
+	"sys_send","sys_setdev","sys_setnok","sys_screate","sys_signal","sys_signaln","sys_sleep",
+	"sys_sleep10","sys_sleep100","sys_sleep1000","sys_sreset","sys_stacktrace","sys_suspend",
+	"sys_unsleep","sys_wait"
+};
 
 
 void syscallsummary_start(){
-	sys_trace=true;
+	sys_trace=TRUE;
 	int i,j;
 	for(i=0;i<NSYSCALL;++i){
 		for(j=0;j<NPROC;++j){
-			sys_frequence[i][j]=0;
+			sys_frequency[i][j]=0;
 			sys_time[i][j]=0;
 		}
 	}
 	for(i=0;i<NPROC;++i){
-		sys_call[i]=false;
+		sys_call[i]=FALSE;
 	}
 }
 
 void syscallsummary_stop(){
-	sys_trace=false;
+	sys_trace=FALSE;
 }
 
 void printsyscallsummary(){
-
+	kprintf("\nvoid printsyscallsummary()\n");
+	int i,j;
+	for(i=0;i<NPROC;++i){
+		if(sys_call[i]){
+			kprintf("Process [pid:%d]\n",i);
+			for(j=0;j<NSYSCALL;++j){
+				if(sys_frequency[j][i]!=0){
+					kprintf("Syscall: %s, count: %d, average execution time: %d (ms)\n",
+					syscall_name[j],sys_frequency[j][i],sys_time[j][i]/sys_frequency[j][i]);
+				}
+			}
+		}
+	}
 }

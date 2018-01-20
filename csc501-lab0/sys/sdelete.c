@@ -14,13 +14,25 @@
  */
 SYSCALL sdelete(int sem)
 {
-	STATWORD ps;    
+
+	/*modified*/
+	if(sys_trace){
+		sys_frequency[SYS_SDELETE][currpid]++;
+		sys_call[currpid]=TRUE;
+		int start_time=ctr1000;
+	}
+
+	STATWORD ps;
 	int	pid;
 	struct	sentry	*sptr;
 
 	disable(ps);
 	if (isbadsem(sem) || semaph[sem].sstate==SFREE) {
 		restore(ps);
+		/* execution time */
+		if(sys_trace){
+			sys_time[SYS_SDELETE][currpid]+=ctr1000-start_time;
+		}
 		return(SYSERR);
 	}
 	sptr = &semaph[sem];
@@ -35,8 +47,9 @@ SYSCALL sdelete(int sem)
 	}
 	restore(ps);
 
+	/* execution time */
 	if(sys_trace){
-		sys_frequency[SYS_SDELETE][currpid]++;
+		sys_time[SYS_SDELETE][currpid]+=ctr1000-start_time;
 	}
 
 	return(OK);

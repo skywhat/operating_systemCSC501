@@ -16,13 +16,26 @@
  */
 SYSCALL kill(int pid)
 {
-	STATWORD ps;    
+
+	/*modified*/
+	if(sys_trace){
+		sys_frequency[SYS_KILL][currpid]++;
+		sys_call[currpid]=TRUE;
+		int start_time=ctr1000;
+	}
+
+
+	STATWORD ps;
 	struct	pentry	*pptr;		/* points to proc. table for pid*/
 	int	dev;
 
 	disable(ps);
 	if (isbadpid(pid) || (pptr= &proctab[pid])->pstate==PRFREE) {
 		restore(ps);
+		/* execution time */
+		if(sys_trace){
+			sys_time[SYS_KILL][currpid]+=ctr1000-start_time;
+		}
 		return(SYSERR);
 	}
 	if (--numproc == 0)
@@ -37,7 +50,7 @@ SYSCALL kill(int pid)
 	dev = pptr->ppagedev;
 	if (! isbaddev(dev) )
 		close(dev);
-	
+
 	send(pptr->pnxtkin, pid);
 
 	freestk(pptr->pbase, pptr->pstklen);
@@ -59,8 +72,9 @@ SYSCALL kill(int pid)
 	}
 	restore(ps);
 
+	/* execution time */
 	if(sys_trace){
-		sys_frequency[SYS_KILL][currpid]++;
+		sys_time[SYS_KILL][currpid]+=ctr1000-start_time;
 	}
 
 	return(OK);

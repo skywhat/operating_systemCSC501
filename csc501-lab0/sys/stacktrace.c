@@ -16,11 +16,23 @@ static unsigned long	*ebp;
  */
 SYSCALL stacktrace(int pid)
 {
+	/*modified*/
+	if(sys_trace){
+		sys_frequency[SYS_STACKTRACE][currpid]++;
+		sys_call[currpid]=TRUE;
+		int start_time=ctr1000;
+	}
+
 	struct pentry	*proc = &proctab[pid];
 	unsigned long	*sp, *fp;
 
-	if (pid != 0 && isbadpid(pid))
+	if (pid != 0 && isbadpid(pid)){
+		/* execution time */
+		if(sys_trace){
+			sys_time[SYS_STACKTRACE][currpid]+=ctr1000-start_time;
+		}
 		return SYSERR;
+	}
 	if (pid == currpid) {
 		asm("movl %esp,esp");
 		asm("movl %ebp,ebp");
@@ -41,6 +53,10 @@ SYSCALL stacktrace(int pid)
 		fp = (unsigned long *) *sp++;
 		if (fp <= sp) {
 			kprintf("bad stack, fp (%08X) <= sp (%08X)\n", fp, sp);
+			/* execution time */
+			if(sys_trace){
+				sys_time[SYS_STACKTRACE][currpid]+=ctr1000-start_time;
+			}
 			return SYSERR;
 		}
 		kprintf("RET  0x%X\n", *sp);
@@ -49,8 +65,16 @@ SYSCALL stacktrace(int pid)
 	kprintf("MAGIC (should be %X): %X\n", MAGIC, *sp);
 	if (sp != (unsigned long *)proc->pbase) {
 		kprintf("unexpected short stack\n");
+		/* execution time */
+		if(sys_trace){
+			sys_time[SYS_STACKTRACE][currpid]+=ctr1000-start_time;
+		}
 		return SYSERR;
 	}
 #endif
+/* execution time */
+if(sys_trace){
+	sys_time[SYS_STACKTRACE][currpid]+=ctr1000-start_time;
+}
 	return OK;
 }

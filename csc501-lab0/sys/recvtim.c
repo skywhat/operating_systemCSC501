@@ -14,12 +14,25 @@
  */
 SYSCALL	recvtim(int maxwait)
 {
-	STATWORD ps;    
+
+	/*modified*/
+	if(sys_trace){
+		sys_frequency[SYS_RECVTIM][currpid]++;
+		sys_call[currpid]=TRUE;
+		int start_time=ctr1000;
+	}
+
+	STATWORD ps;
 	struct	pentry	*pptr;
 	int	msg;
 
-	if (maxwait<0 || clkruns == 0)
+	if (maxwait<0 || clkruns == 0){
+		/* execution time */
+		if(sys_trace){
+			sys_time[SYS_RECVTIM][currpid]+=ctr1000-start_time;
+		}
 		return(SYSERR);
+	}
 	disable(ps);
 	pptr = &proctab[currpid];
 	if ( !pptr->phasmsg ) {		/* if no message, wait		*/
@@ -36,9 +49,9 @@ SYSCALL	recvtim(int maxwait)
 		msg = TIMEOUT;
 	}
 	restore(ps);
-
+	/* execution time */
 	if(sys_trace){
-		sys_frequency[SYS_RECVTIM][currpid]++;
+		sys_time[SYS_RECVTIM][currpid]+=ctr1000-start_time;
 	}
 	return(msg);
 }

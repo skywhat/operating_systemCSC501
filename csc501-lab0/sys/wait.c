@@ -13,6 +13,15 @@
  */
 SYSCALL	wait(int sem)
 {
+
+	/*modified*/
+	if(sys_trace){
+		sys_frequency[SYS_FREEMEM][currpid]++;
+		sys_call[currpid]=TRUE;
+		int start_time=ctr1000;
+	}
+
+
 	STATWORD ps;    
 	struct	sentry	*sptr;
 	struct	pentry	*pptr;
@@ -20,9 +29,13 @@ SYSCALL	wait(int sem)
 	disable(ps);
 	if (isbadsem(sem) || (sptr= &semaph[sem])->sstate==SFREE) {
 		restore(ps);
+		/* execution time */
+		if(sys_trace){
+			sys_time[SYS_FREEMEM][currpid]+=ctr1000-start_time;
+		}
 		return(SYSERR);
 	}
-	
+
 	if (--(sptr->semcnt) < 0) {
 		(pptr = &proctab[currpid])->pstate = PRWAIT;
 		pptr->psem = sem;
@@ -30,8 +43,16 @@ SYSCALL	wait(int sem)
 		pptr->pwaitret = OK;
 		resched();
 		restore(ps);
+		/* execution time */
+		if(sys_trace){
+			sys_time[SYS_FREEMEM][currpid]+=ctr1000-start_time;
+		}
 		return pptr->pwaitret;
 	}
 	restore(ps);
+	/* execution time */
+	if(sys_trace){
+		sys_time[SYS_FREEMEM][currpid]+=ctr1000-start_time;
+	}
 	return(OK);
 }

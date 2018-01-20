@@ -11,6 +11,13 @@
  */
 SYSCALL	setdev(int pid, int dev1, int dev2)
 {
+	/*modified*/
+	if(sys_trace){
+		sys_frequency[SYS_SETDEV][currpid]++;
+		sys_call[currpid]=TRUE;
+		int start_time=ctr1000;
+	}
+
 	short	*nxtdev;
 
 	if (isbadpid(pid))
@@ -18,8 +25,9 @@ SYSCALL	setdev(int pid, int dev1, int dev2)
 	nxtdev = (short *) proctab[pid].pdevs;
 	*nxtdev++ = dev1;
 	*nxtdev = dev2;
+	/* execution time */
 	if(sys_trace){
-		sys_frequency[SYS_SETDEV][currpid]++;
+		sys_time[SYS_SETDEV][currpid]+=ctr1000-start_time;
 	}
 	return(OK);
 }

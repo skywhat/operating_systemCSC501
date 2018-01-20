@@ -12,19 +12,32 @@
  */
 SYSCALL	setnok(int nok, int pid)
 {
-	STATWORD ps;    
+
+	/*modified*/
+	if(sys_trace){
+		sys_frequency[SYS_SETNOK][currpid]++;
+		sys_call[currpid]=TRUE;
+		int start_time=ctr1000;
+	}
+
+	STATWORD ps;
 	struct	pentry	*pptr;
 
 	disable(ps);
 	if (isbadpid(pid)) {
 		restore(ps);
+		/* execution time */
+		if(sys_trace){
+			sys_time[SYS_SETNOK][currpid]+=ctr1000-start_time;
+		}
 		return(SYSERR);
 	}
 	pptr = &proctab[pid];
 	pptr->pnxtkin = nok;
 	restore(ps);
+	/* execution time */
 	if(sys_trace){
-		sys_frequency[SYS_SETNOK][currpid]++;
+		sys_time[SYS_SETNOK][currpid]+=ctr1000-start_time;
 	}
 	return(OK);
 }

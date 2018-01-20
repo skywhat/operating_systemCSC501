@@ -14,15 +14,25 @@
 SYSCALL	freemem(struct mblock *block, unsigned size)
 {
 	/*modified*/
-	int start_time=ctr1000;
+	if(sys_trace){
+		sys_frequency[SYS_FREEMEM][currpid]++;
+		sys_call[currpid]=TRUE;
+		int start_time=ctr1000;
+	}
 
-	STATWORD ps;    
+	STATWORD ps;
 	struct	mblock	*p, *q;
 	unsigned top;
 
 	if (size==0 || (unsigned)block>(unsigned)maxaddr
-	    || ((unsigned)block)<((unsigned) &end))
+	    || ((unsigned)block)<((unsigned) &end)){
+/* execution time */
+if(sys_trace){
+	sys_time[SYS_FREEMEM][currpid]+=ctr1000-start_time;
+}
+
 		return(SYSERR);
+	}
 	size = (unsigned)roundmb(size);
 	disable(ps);
 	for( p=memlist.mnext,q= &memlist;
@@ -32,6 +42,10 @@ SYSCALL	freemem(struct mblock *block, unsigned size)
 	if (((top=q->mlen+(unsigned)q)>(unsigned)block && q!= &memlist) ||
 	    (p!=NULL && (size+(unsigned)block) > (unsigned)p )) {
 		restore(ps);
+		/* execution time */
+		if(sys_trace){
+			sys_time[SYS_FREEMEM][currpid]+=ctr1000-start_time;
+		}
 		return(SYSERR);
 	}
 	if ( q!= &memlist && top == (unsigned)block )
@@ -47,10 +61,9 @@ SYSCALL	freemem(struct mblock *block, unsigned size)
 		q->mnext = p->mnext;
 	}
 	restore(ps);
-
+	/* execution time */
 	if(sys_trace){
-		sys_frequency[SYS_FREEMEM][currpid]++;
+		sys_time[SYS_FREEMEM][currpid]+=ctr1000-start_time;
 	}
-
 	return(OK);
 }
