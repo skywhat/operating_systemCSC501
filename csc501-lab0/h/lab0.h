@@ -1,6 +1,7 @@
 #ifndef _LAB0_H_
 #define _LAB0_H_
 
+#define NSYSCALL 27 /* set the number of system call*/
 /* 27 system calls */
 
 /*

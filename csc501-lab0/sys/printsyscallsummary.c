@@ -7,7 +7,6 @@
 
 Bool sys_trace=FALSE;/*trace or not*/
 
-#define NSYSCALL 27 /* set the number of system call*/
 /*27 system calls*/
 int sys_frequency[NSYSCALL][NPROC];
 int sys_time[NSYSCALL][NPROC];
