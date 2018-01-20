@@ -15,7 +15,7 @@ SYSCALL	setdev(int pid, int dev1, int dev2)
 	if(sys_trace){
 		sys_frequency[SYS_SETDEV][currpid]++;
 		sys_call[currpid]=TRUE;
-		int start_time=ctr1000;
+		start_time=ctr1000;
 	}
 
 	short	*nxtdev;

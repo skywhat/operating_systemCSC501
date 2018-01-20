@@ -19,7 +19,7 @@ SYSCALL signaln(int sem, int count)
 	if(sys_trace){
 		sys_frequency[SYS_SIGNALN][currpid]++;
 		sys_call[currpid]=TRUE;
-		int start_time=ctr1000;
+		start_time=ctr1000;
 	}
 
 

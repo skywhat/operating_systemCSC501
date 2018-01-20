@@ -19,7 +19,7 @@ SYSCALL	suspend(int pid)
 	if(sys_trace){
 		sys_frequency[SYS_SUSPEND][currpid]++;
 		sys_call[currpid]=TRUE;
-		int start_time=ctr1000;
+		start_time=ctr1000;
 	}
 	STATWORD ps;
 	struct	pentry	*pptr;		/* pointer to proc. tab. entry	*/

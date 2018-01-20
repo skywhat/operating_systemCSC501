@@ -19,7 +19,7 @@ SYSCALL	recvtim(int maxwait)
 	if(sys_trace){
 		sys_frequency[SYS_RECVTIM][currpid]++;
 		sys_call[currpid]=TRUE;
-		int start_time=ctr1000;
+		start_time=ctr1000;
 	}
 
 	STATWORD ps;

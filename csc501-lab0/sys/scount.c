@@ -15,7 +15,7 @@ SYSCALL scount(int sem)
 	if(sys_trace){
 		sys_frequency[SYS_SCOUNT][currpid]++;
 		sys_call[currpid]=TRUE;
-		int start_time=ctr1000;
+		start_time=ctr1000;
 	}
 
 extern	struct	sentry	semaph[];

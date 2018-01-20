@@ -16,7 +16,7 @@ SYSCALL getprio(int pid)
 	if(sys_trace){
 		sys_frequency[SYS_GETPRIO][currpid]++;
 		sys_call[currpid]=TRUE;
-		int start_time=ctr1000;
+		start_time=ctr1000;
 	}
 
 	STATWORD ps;

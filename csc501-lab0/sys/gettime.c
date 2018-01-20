@@ -17,7 +17,7 @@ SYSCALL	gettime(long *timvar)
 	if(sys_trace){
 		sys_frequency[SYS_GETTIME][currpid]++;
 		sys_call[currpid]=TRUE;
-		int start_time=ctr1000;
+		start_time=ctr1000;
 	}
     /* long	now; */
 

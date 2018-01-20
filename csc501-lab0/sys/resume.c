@@ -17,7 +17,7 @@ SYSCALL resume(int pid)
 	if(sys_trace){
 		sys_frequency[SYS_RESUME][currpid]++;
 		sys_call[currpid]=TRUE;
-		int start_time=ctr1000;
+		start_time=ctr1000;
 	}
 
 	STATWORD ps;

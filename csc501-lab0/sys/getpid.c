@@ -15,7 +15,7 @@ SYSCALL getpid()
 	if(sys_trace){
 		sys_frequency[SYS_GETPID][currpid]++;
 		sys_call[currpid]=TRUE;
-		int start_time=ctr1000;
+		start_time=ctr1000;
 	}
 	/* execution time */
 	if(sys_trace){
