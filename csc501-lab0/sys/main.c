@@ -13,7 +13,7 @@
 int prX;
 void halt();
 prch(c)
-char c
+char c;
 {
 	int i;
 	sleep(5);
