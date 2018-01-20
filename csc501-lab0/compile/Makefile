@@ -3,9 +3,9 @@
 #
 
 INCLUDE = -I../h
-CFLAGS  = -m32 -march=i586 -fno-builtin -c -Wall -O0 ${DEFS} ${INCLUDE}
+CFLAGS  = -m32 -march=i586 -fno-builtin -c -Wall -O0  ${DEFS} ${INCLUDE}
 SDEFS	= -I../h
-ASFLAGS = --32
+ASFLAGS = --32 
 
 CC      =       /usr/bin/gcc
 cPP     =       /usr/bin/gcc -E

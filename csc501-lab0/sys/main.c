@@ -27,6 +27,10 @@ int main()
 	kprintf("\nbefore zfunction: %x\n",x);
 	kprintf("\nafter  zfunction: %x\n",zfunction(x));
 
+	long y=0xabcdabcd;
+	kprintf("\nbefore zfunction: %x\n",y);
+	kprintf("\nafter  zfunction: %x\n",zfunction(y));
+
 	printsegaddress();
 	printtos();
 
