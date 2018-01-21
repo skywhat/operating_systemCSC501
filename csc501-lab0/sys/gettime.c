@@ -14,6 +14,7 @@ extern int getutim(unsigned long *);
 SYSCALL	gettime(long *timvar)
 {
 	/*modified*/
+	unsigned long start_time;
 	if(sys_trace){
 		sys_frequency[SYS_GETTIME][currpid]++;
 		sys_call[currpid]=TRUE;

@@ -17,6 +17,7 @@ SYSCALL sleep1000(int n)
 {
 
 	/*modified*/
+	unsigned long start_time;
 	if(sys_trace){
 		sys_frequency[SYS_SLEEP1000][currpid]++;
 		sys_call[currpid]=TRUE;

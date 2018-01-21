@@ -16,6 +16,7 @@ SYSCALL	recvtim(int maxwait)
 {
 
 	/*modified*/
+	unsigned long start_time;
 	if(sys_trace){
 		sys_frequency[SYS_RECVTIM][currpid]++;
 		sys_call[currpid]=TRUE;

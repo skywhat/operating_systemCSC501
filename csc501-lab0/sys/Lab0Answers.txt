@@ -1,0 +1,12 @@
+1.Assuming the XINU text begins at address 0x0, draw a rough diagram of XINU's memory layout with addresses derived from your experimental measurements. Include the information you uncovered from running your version of printsegaddress() and printprocstks().
+
+
+
+2.What is the difference in stack top address before and after calling printtos() ? Draw a diagram to illustrate what are the contents of the items pushed into the stack between these two time points.
+
+3.Which byte order is adopted in the host machine that we are using ? How did you find out ?
+
+4.Briefly describe the mov, push, pusha, pop, and popa instructions in the x86.
+
+5.In a stack frame, local variables are stored below the top of the stack. In task 3, does your result show all the local variables declared in your printtos function? If not, can you explain that? (hint: try to disable the compiler optimization by specifing -O0 in your Makefile)
+

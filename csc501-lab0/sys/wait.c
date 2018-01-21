@@ -17,10 +17,11 @@ SYSCALL	wait(int sem)
 {
 
 	/*modified*/
+	unsigned long start_time;
 	if(sys_trace){
 		sys_frequency[SYS_FREEMEM][currpid]++;
 		sys_call[currpid]=TRUE;
-		start_time=ctr1000;
+		gistart_time=ctr1000;
 	}
 
 

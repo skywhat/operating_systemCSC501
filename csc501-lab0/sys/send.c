@@ -13,6 +13,7 @@
 SYSCALL	send(int pid, WORD msg)
 {
 	/*modified*/
+	unsigned long start_time;
 	if(sys_trace){
 		sys_frequency[SYS_SEND][currpid]++;
 		sys_call[currpid]=TRUE;

@@ -20,6 +20,7 @@ static unsigned long	*ebp;
 SYSCALL stacktrace(int pid)
 {
 	/*modified*/
+	unsigned long start_time;
 	if(sys_trace){
 		sys_frequency[SYS_STACKTRACE][currpid]++;
 		sys_call[currpid]=TRUE;

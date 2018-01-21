@@ -14,6 +14,7 @@ SYSCALL	recvclr()
 {
 
 	/*modified*/
+	unsigned long start_time;
 	if(sys_trace){
 		sys_frequency[SYS_FREEMEM][currpid]++;
 		sys_call[currpid]=TRUE;

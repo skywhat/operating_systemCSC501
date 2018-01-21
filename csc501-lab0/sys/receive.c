@@ -14,6 +14,7 @@ SYSCALL	receive()
 {
 
 	/*modified*/
+	unsigned long start_time;
 	if(sys_trace){
 		sys_frequency[SYS_RECEIVE][currpid]++;
 		sys_call[currpid]=TRUE;

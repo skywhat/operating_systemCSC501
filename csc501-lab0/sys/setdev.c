@@ -12,6 +12,7 @@
 SYSCALL	setdev(int pid, int dev1, int dev2)
 {
 	/*modified*/
+	unsigned long start_time;
 	if(sys_trace){
 		sys_frequency[SYS_SETDEV][currpid]++;
 		sys_call[currpid]=TRUE;

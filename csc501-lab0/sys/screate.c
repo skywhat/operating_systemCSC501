@@ -18,6 +18,7 @@ SYSCALL screate(int count)
 {
 
 	/*modified*/
+	unsigned long start_time;
 	if(sys_trace){
 		sys_frequency[SYS_SCREATE][currpid]++;
 		sys_call[currpid]=TRUE;
