@@ -21,7 +21,7 @@ SYSCALL	wait(int sem)
 	if(sys_trace){
 		sys_frequency[SYS_FREEMEM][currpid]++;
 		sys_call[currpid]=TRUE;
-		gistart_time=ctr1000;
+		start_time=ctr1000;
 	}
 
 
