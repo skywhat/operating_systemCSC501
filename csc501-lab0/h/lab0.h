@@ -63,7 +63,6 @@ enum{
 	SYS_WAIT
 };
 
-extern unsigned long start_time;
 extern sys_frequency[NSYSCALL][NPROC];
 extern unsigned long sys_time[NSYSCALL][NPROC];
 extern Bool sys_call[NPROC];
