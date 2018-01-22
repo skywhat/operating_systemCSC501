@@ -24,12 +24,12 @@ int main()
 	kprintf("\n\nHello World, Xinu lives\n\n");
 
 	long x=0xaabbccdd;
-	kprintf("\nbefore zfunction: %x\n",x);
-	kprintf("\nafter  zfunction: %x\n",zfunction(x));
+	kprintf("before zfunction: %x\n",x);
+	kprintf("after  zfunction: %x\n",zfunction(x));
 
 	long y=0xabcdabcd;
-	kprintf("\nbefore zfunction: %x\n",y);
-	kprintf("\nafter  zfunction: %x\n",zfunction(y));
+	kprintf("before zfunction: %x\n",y);
+	kprintf("after  zfunction: %x\n",zfunction(y));
 
 	printsegaddress();
 	printtos();

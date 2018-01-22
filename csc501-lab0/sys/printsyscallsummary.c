@@ -47,7 +47,7 @@ void printsyscallsummary(){
 			kprintf("Process [pid:%d]\n",i);
 			for(j=0;j<NSYSCALL;++j){
 				if(sys_frequency[j][i]!=0){
-					kprintf("Syscall: %s, count: %d, average execution time: %d (ms)\n",
+					kprintf("\tSyscall: %s, count: %d, average execution time: %d (ms)\n",
 					syscall_name[j],sys_frequency[j][i],sys_time[j][i]/sys_frequency[j][i]);
 				}
 			}

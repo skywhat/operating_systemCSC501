@@ -16,11 +16,11 @@ void printtos(){
 
 	kprintf("\nvoid printtos()\n");
 	kprintf("Before[0x%08x]: 0x%08x\n",addr1+2,*(addr1+2));/* +1: return address*/
-	kprintf("After[0x%08x]: 0x%08x\n",addr2,*(addr2));
+	kprintf("After[0x%08x]: 0x%08x\n",addr1,*(addr1));
 	
 	int i;
 	for(i=4;i<8;++i){
-		kprintf("        element[0x%08x]: 0x%08x\n",addr1-i,*(addr1-i));
+		kprintf("\telement[0x%08x]: 0x%08x\n",addr1-i,*(addr1-i));
 	}
 
 }

@@ -5,7 +5,7 @@ extern etext;
 extern edata;
 
 void printsegaddress(){
-	kprintf("void printsegaddress()\n\n");
+	kprintf("\nvoid printsegaddress()\n");
 	
 	kprintf("Current: etext[0x%08x]=0x%08x, ",&etext,etext);
 	kprintf("edata[0x%08x]=0x%08x, ",&edata,edata);
