@@ -95,3 +95,7 @@ reference: https://en.wikibooks.org/wiki/X86_Assembly/Other_Instructions
 5.In a stack frame, local variables are stored below the top of the stack. In task 3,
 does your result show all the local variables declared in your printtos function? If not,
 can you explain that? (hint: try to disable the compiler optimization by specifing -O0 in your Makefile)
+
+No.
+local variables are pushed into the stack when the function is called since compiler optimization would change the position.
+ If you disable the compiler optimization, the variables are showed in the position.
