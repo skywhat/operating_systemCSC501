@@ -1,12 +1,97 @@
-1.Assuming the XINU text begins at address 0x0, draw a rough diagram of XINU's memory layout with addresses derived from your experimental measurements. Include the information you uncovered from running your version of printsegaddress() and printprocstks().
+1.
+Assuming the XINU text begins at address 0x0, draw a rough diagram of XINU's memory
+layout with addresses derived from your experimental measurements.
+Include the information you uncovered from running your version of printsegaddress() and printprocstks().
 
+|------------|  begin 0x00000000
+|   text     |
+|------------|  etext 0x0001c5ed
+|   data     |
+|------------|  edata 0x00021769
+|   bss      |
+|------------|  ebss  0x00029e78
+|   heap     |
+|            |
+|------------|
+|   main     |
+|   stack    |  stack pointer 0x00ffefc4
+|            |  stack limit   0x00ffdffc
+|            |
+|------------|  stack base 0x00ffeff8
+|   free     |
+|   memory   |
+|------------|
 
+2.
+What is the difference in stack top address before and after calling printtos() ?
+Draw a diagram to illustrate what are the contents of the items pushed into the stack between these two time points.
 
-2.What is the difference in stack top address before and after calling printtos() ? Draw a diagram to illustrate what are the contents of the items pushed into the stack between these two time points.
+|            |
+|            |
+|------------|  0x00ffefb0
+|   PC       |
+|   (return) |
+|   (address)|
+|------------|
+|   ebp      |
+|            |
+|------------|
+|            |
+|            |
+|            |
+|------------|
+|     a      |
+|------------|  0x00ffef98
+|     b      |
+|------------|  0x00ffef94
+|     c      |
+|------------|  0x00ffef90
+|     d      |
+|------------|  0x00ffef8c
+|            |
+|            |
+|            |
+|            |
+|------------|  0x00ffef70
+
 
 3.Which byte order is adopted in the host machine that we are using ? How did you find out ?
 
+Little endian is adopted in this machine.
+Use this function to see little or big endian.
+
+    short int word=0x0001;
+    char *test=(char *)&word;
+    kprintf("%s\n",test[0]?"Little endian":"Big endian");
+
+reference: https://www.codeproject.com/Articles/4804/Basic-concepts-on-Endianness
+
 4.Briefly describe the mov, push, pusha, pop, and popa instructions in the x86.
 
-5.In a stack frame, local variables are stored below the top of the stack. In task 3, does your result show all the local variables declared in your printtos function? If not, can you explain that? (hint: try to disable the compiler optimization by specifing -O0 in your Makefile)
+mov
+moves the value from the first operand to second operand.
 
+push
+  This instruction decrements the stack pointer
+  and stores the data specified as the argument into the location pointed to by the stack pointer.
+
+pusha
+This instruction pushes all the general purpose registers onto the stack in the following order:
+AX, CX, DX, BX, SP, BP, SI, DI. The value of SP pushed is the value before the instruction is executed.
+It is useful for saving state before an operation that could potential change these registers.
+
+
+pop
+This instruction loads the data stored in the location pointed to by the stack pointer into the argument specified
+and then increments the stack pointer. For example:
+
+popa
+This instruction pops all the general purpose registers off the stack in the reverse order of PUSHA.
+That is, DI, SI, BP, SP, BX, DX, CX, AX. Used to restore state after a call to PUSHA.
+
+reference: https://en.wikibooks.org/wiki/X86_Assembly/Other_Instructions
+
+
+5.In a stack frame, local variables are stored below the top of the stack. In task 3,
+does your result show all the local variables declared in your printtos function? If not,
+can you explain that? (hint: try to disable the compiler optimization by specifing -O0 in your Makefile)
