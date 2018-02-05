@@ -48,7 +48,8 @@ SYS =	blkcmp.c	blkequ.c	main.c		stacktrace.c	\
 	signal.c	signaln.c	sleep.c		sleep10.c	\
 	sleep100.c	sleep1000.c	sreset.c	suspend.c	\
 	unsleep.c	userret.c	wait.c		wakeup.c	\
-	write.c		xdone.c		pci.c		shutdown.c
+	write.c		xdone.c		pci.c		shutdown.c  \
+	schedclass.c
 
 TTY =	ttyalloc.c	ttycntl.c	ttygetc.c	ttyiin.c	\
 	ttyinit.c	ttynew.c	ttyopen.c	ttyputc.c	\
@@ -133,7 +134,7 @@ tags: FRC
 	make -C ../config/ -f ../config/Makefile clean all
 
 ../h/conf.h ../sys/conf.c: ../config/config Configuration
-	../config/config; mv conf.c ../sys 
+	../config/config; mv conf.c ../sys
 
 ${LIB}/libxc.a: FRC
 	(cd ${LIB}/libxc; make install)
@@ -152,7 +153,7 @@ ethint.o: ../mon/ethint.S
 
 startup.o: ../sys/startup.S Makefile
 	${CPP} ${SDEFS} -DBRELOC=${BRELOC} -DBOOTPLOC=${BOOTPLOC} \
-	../sys/startup.S | ${AS} ${ASFLAGS} -o startup.o 
+	../sys/startup.S | ${AS} ${ASFLAGS} -o startup.o
 
 moncksum.o: ../mon/moncksum.S
 	${CPP} ${SDEFS} ../mon/moncksum.S | ${AS} ${ASFLAGS} -o moncksum.o
@@ -166,7 +167,7 @@ montftp.o: ../mon/montftp.c
 comint.o: ../com/comint.S
 	${CPP} ${SDEFS} ../com/comint.S | ${AS} ${ASFLAGS} -o comint.o
 
-initialize.o: $(OBJ) startup.o 
+initialize.o: $(OBJ) startup.o
 	sh mkvers.sh
 	${CC} -c ${CFLAGS} -DVERSION=\""`cat version`"\" ../sys/initialize.c
 
@@ -177,7 +178,7 @@ ${COMOBJ}:
 ${SYSOBJ}:
 	 ${CC} ${CFLAGS} ../sys/`basename $@ .o`.[c]
 ${TTYOBJ}:
-	 ${CC} ${CFLAGS} ../tty/`basename $@ .o`.[c]	 
+	 ${CC} ${CFLAGS} ../tty/`basename $@ .o`.[c]
 FRC:
 #------------------------------------------------------------------------
 
@@ -439,6 +440,10 @@ setnok.o: ../sys/setnok.c /usr/include/stdc-predef.h ../h/conf.h \
  ../h/kernel.h ../h/systypes.h ../h/mem.h ../h/proc.h ../h/stdio.h
 shutdown.o: ../sys/shutdown.c /usr/include/stdc-predef.h ../h/kernel.h \
  ../h/systypes.h ../h/conf.h ../h/mem.h ../h/stdio.h
+
+schedclass.o: ../sys/schedclass.c ../h/sched.h
+
+
 signal.o: ../sys/signal.c /usr/include/stdc-predef.h ../h/conf.h \
  ../h/kernel.h ../h/systypes.h ../h/mem.h ../h/proc.h ../h/q.h ../h/sem.h \
  ../h/stdio.h
