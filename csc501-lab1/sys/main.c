@@ -20,9 +20,14 @@ int main()
 
 	int i;
 	kprintf("\n\nTEST1:\n");
-	resume(prA=create(prch,2000,20,"proc A",1,'A'));
-	resume(prB=create(prch,2000,20,"proc B",1,'B'));
-	resume(prC=create(prch,2000,20,"proc C",1,'C'));
+	prA=create(prch,2000,30,"proc A",1,'A');
+	prB=create(prch,2000,30,"proc B",1,'B');
+	prC=create(prch,2000,10,"proc C",1,'C');
+
+	resume(prC);
+	suspend(prB);
+	resume(prA);
+
 
 	for(i=0;i<NPROC;++i){
 		if(i!=0&&isbadpid(i)){
