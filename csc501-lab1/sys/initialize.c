@@ -14,6 +14,8 @@
 #include <io.h>
 #include <stdio.h>
 
+#include "sched.h"
+
 /*#define DETAIL */
 #define HOLESIZE	(600)	
 #define	HOLESTART	(640 * 1024)
@@ -26,6 +28,12 @@ extern	int	pci_init();
 extern	int	mon_init();
 extern	int	ripinit();
 LOCAL   int	sysinit();
+
+/* modified */
+int schedclass=DEFAULTSCHED; /*default reschedule algorithm in resched.c*/ 
+
+
+
 
 /* Declarations of major kernel variables */
 struct	pentry	proctab[NPROC]; /* process table			*/

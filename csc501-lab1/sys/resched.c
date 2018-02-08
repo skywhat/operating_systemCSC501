@@ -5,6 +5,9 @@
 #include <proc.h>
 #include <q.h>
 
+#include "sched.h"
+
+
 unsigned long currSP;	/* REAL sp of current process */
 extern int ctxsw(int, int, int, int);
 /*-----------------------------------------------------------------------
@@ -19,6 +22,27 @@ int resched()
 {
 	register struct	pentry	*optr;	/* pointer to old process entry */
 	register struct	pentry	*nptr;	/* pointer to new process entry */
+
+	if(schedclass==RANDOMSCHED){
+		int sum=0;
+		int ind=q[rdytail].qprev;
+		while(ind!=rdyhead){
+			sum+=q[ind].qkey;/* priority */
+			ind=q[ind].qprev;/* next pid */
+		}
+		printf("sum of priority: %d\n",sum);
+		srand(0);	
+		int random_num=rand()%sum;
+		printf("random number %d\n\n\n",random_num);
+	
+
+		return OK;
+	}
+	else if(schedclass==LINUXSCHED){
+	
+	}
+	else{
+
 
 	/* no switch needed if current process priority higher than next*/
 
@@ -46,4 +70,5 @@ int resched()
 	
 	/* The OLD process returns here when resumed. */
 	return OK;
+	}
 }

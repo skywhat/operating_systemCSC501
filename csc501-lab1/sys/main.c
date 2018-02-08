@@ -8,6 +8,8 @@
 #include<q.h>
 #include<sched.h>
 
+#define LOOP 50
+
 /*------------------------------------------------------------------------
  *  main  --  user main program
  *------------------------------------------------------------------------
@@ -41,8 +43,8 @@ int main()
 	kprintf("Get %d\n",s);
 
 	//RANDOMSCHED
-	if(s<2){
-		setschedclass(RANDOMSCHED);
+	if(s==RANDOMSCHED||s!=LINUXSCHED){
+		setschedclass(s);
 		prA=create(proc_a,2000,10,"proc A",1,'A');
 		prB=create(proc_b,2000,20,"proc B",1,'B');
 		prC=create(proc_c,2000,30,"proc C",1,'C');
@@ -57,7 +59,7 @@ int main()
 		kprintf("\nTest Result: A = %d, B = %d, C = %d\n",a_cnt,b_cnt,c_cnt);
 	}
 	//LINUXSCHED
-	else{
+	else if(s==LINUXSCHED){
 		setschedclass(LINUXSCHED);
 		resume(prA = create(proc,2000,5,"proc A",1,'A'));
 		resume(prB=create(proc_b,2000,20,"proc B",1,'B'));
