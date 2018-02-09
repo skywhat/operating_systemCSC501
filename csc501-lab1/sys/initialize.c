@@ -31,7 +31,7 @@ LOCAL   int	sysinit();
 
 /* modified */
 int schedclass=DEFAULTSCHED; /*default reschedule algorithm in resched.c*/ 
-
+int random_seed=1000; /*random seed for random reschedule algorithm*/
 
 
 

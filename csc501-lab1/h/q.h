@@ -19,6 +19,8 @@ struct	qent	{		/* one for each process plus two for	*/
 extern	struct	qent q[];
 extern	int	nextqueue;
 
+
+
 /* inline list manipulation procedures */
 
 #define	isempty(list)	(q[(list)].qnext >= NPROC)

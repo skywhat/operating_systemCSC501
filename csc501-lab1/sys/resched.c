@@ -24,18 +24,57 @@ int resched()
 	register struct	pentry	*nptr;	/* pointer to new process entry */
 
 	if(schedclass==RANDOMSCHED){
+		int next_pid;
+		optr=&proctab[currpid];
+		if(optr->pstate==PRCURR){
+			optr->pstate=PRREADY;	
+			insert(currpid,rdyhead,optr->pprio);
+		}
+		if(q[rdytail].qprev==NULLPROC){
+
+			next_pid=0;
+			nptr=&proctab[next_pid];
+			currpid=dequeue(next_pid);
+
+			nptr->pstate = PRCURR;		/* mark it currently running	*/
+
+			#ifdef	RTCLOCK
+			preempt = QUANTUM;		/* reset preemption counter	*/
+			#endif
+			ctxsw((int)&optr->pesp, (int)optr->pirmask, (int)&nptr->pesp, (int)nptr->pirmask);
+			return OK;
+		}
 		int sum=0;
 		int ind=q[rdytail].qprev;
 		while(ind!=rdyhead){
 			sum+=q[ind].qkey;/* priority */
 			ind=q[ind].qprev;/* next pid */
 		}
-		printf("sum of priority: %d\n",sum);
-		srand(0);	
 		int random_num=rand()%sum;
-		printf("random number %d\n\n\n",random_num);
-	
 
+		next_pid=q[rdytail].qprev;
+		while(random_num>=q[next_pid].qkey){
+			random_num-=q[next_pid].qkey;
+			next_pid=q[next_pid].qprev;
+		}
+
+	
+		if(currpid==next_pid){
+			optr->pstate=PRCURR;
+			dequeue(next_pid);
+			return(OK);
+		}
+
+		nptr=&proctab[next_pid];
+
+		currpid=dequeue(next_pid);
+
+	nptr->pstate = PRCURR;		/* mark it currently running	*/
+
+#ifdef	RTCLOCK
+	preempt = QUANTUM;		/* reset preemption counter	*/
+#endif
+	ctxsw((int)&optr->pesp, (int)optr->pirmask, (int)&nptr->pesp, (int)nptr->pirmask);
 		return OK;
 	}
 	else if(schedclass==LINUXSCHED){

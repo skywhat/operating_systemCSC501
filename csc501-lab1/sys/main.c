@@ -72,6 +72,8 @@ int main()
 		kprintf("\n");
 	}
 //shutdown
+//
+printf("All done.");
 	return 0;
 }
 

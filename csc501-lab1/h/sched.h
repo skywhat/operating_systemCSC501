@@ -9,5 +9,6 @@ extern int schedclass;
 extern void setschedclass(int sched_class);
 extern int getschedclass();
 
+extern int random_seed;
 
 #endif
