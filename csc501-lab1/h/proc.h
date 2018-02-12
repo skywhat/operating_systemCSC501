@@ -60,6 +60,11 @@ struct	pentry	{
 	int	fildes[_NFILE];		/* file - device translation	*/
 	int	ppagedev;		/* pageing dgram device		*/
 	int	pwaitret;
+
+	/* modified for linux like scheduling */
+	int pcounter;  /* how many ticks are left from its quantum */
+	int newpprio; /* in case of priority changes in the middle of an epoch.  */
+
 };
 
 

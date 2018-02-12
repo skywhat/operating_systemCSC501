@@ -27,7 +27,6 @@ volatile int s=0;
 int main()
 {
 	kprintf("\n\nHello World, Xinu lives\n\n");
-
 	int i;
 	int count=0;
 	char buf[8];
@@ -62,8 +61,8 @@ int main()
 	else if(s==LINUXSCHED){
 		setschedclass(LINUXSCHED);
 		resume(prA = create(proc,2000,5,"proc A",1,'A'));
-		resume(prB=create(proc_b,2000,20,"proc B",1,'B'));
-		resume(prC=create(proc_c,2000,30,"proc C",1,'C'));
+		resume(prB = create(proc,2000,50,"proc B",1,'B'));
+		resume(prC = create(proc,2000,90,"proc C",1,'C'));
 
 		while(count++<LOOP){
 			kprintf("M");
@@ -73,7 +72,6 @@ int main()
 	}
 //shutdown
 //
-printf("All done.");
 	return 0;
 }
 
