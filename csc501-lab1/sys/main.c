@@ -1,9 +1,8 @@
 #include <conf.h>
 #include <kernel.h>
 #include <q.h>
-#include <sched.h>
 #include <lab1.h>
-
+#include <stdio.h>
 #define LOOP	50
 
 int prA, prB, prC;
