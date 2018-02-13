@@ -1,0 +1,45 @@
+1.
+What are the advantages and disadvantages of each of the two scheduling policies? Also, give the advantages and disadvantages of the round robin scheduling policy originally implemented in Xinu.
+
+Random Scheduler
+reference: http://pages.cs.wisc.edu/~remzi/OSTEP/cpu-sched-lottery.pdf
+Advantages:
+   1) random often avoids strange corner-case behaviors that a traditional algorithm may have trouble handling.
+   2) random scheduler is lightweight, requiring little state to track alternatives.
+   3) random can be quite fast. Thus random can be used in a number of places where speed is required.
+   4) no starvation happens.
+Disadvantages:
+	1)do not mesh well with I/O
+	2) how to guarantee a good random number statistically.
+
+Linux-like Scheduler
+Advantages:
+	1) for the previous process whose counter has not been used up, its priority would be improved. It is pretty fair for all the process to some extent.
+	every process have the chance to run throughout the epoch.
+	2) no starvation happens.
+	
+Disadvantages:
+	1)requiring maintain states to track alternatives.
+
+Round Robin
+Advantages:
+	1)for equal priority processes, they have the same execution time.
+	2)quite fast without computation.
+Disadvantages:
+	1) starvation happens. The processes whose priority is low would never be executed.
+
+
+
+2.
+Assume that there are three processes P1, P2, P3 that will run forever without blocking. We want to allocate the following CPU times to each of them: 20% to P1, 30% to P2, and 50% to P3. Which priorities do we need to set to P1, P2, and P3 to accomplish this if we want to use the Random scheduler?  Assume that those processes are the only ones running in the machine. Could you give a generalization of your result to n processes? Explain.
+
+set P1, P2, and P3 priorities into 20,30,50, thus their ratio is 2:3:5
+As for n processes, their priorities ratio should be set which is same as the CPU execution time.
+
+
+3.
+Describe the way each of the schedulers affects the NULL process.
+
+both schedulers are the same.
+Null process run when all processes are not running or not in the ready list.
+

@@ -6,7 +6,7 @@
 #include <stdio.h>
 
 #include<q.h>
-#include<sched.h>
+#include<lab1.h>
 
 #define LOOP 50
 
@@ -60,9 +60,9 @@ int main()
 	//LINUXSCHED
 	else if(s==LINUXSCHED){
 		setschedclass(LINUXSCHED);
-		resume(prA = create(proc,2000,5,"proc A",1,'A'));
+		resume(prA = create(proc,2000,50,"proc A",1,'A'));
 		resume(prB = create(proc,2000,50,"proc B",1,'B'));
-		resume(prC = create(proc,2000,90,"proc C",1,'C'));
+		resume(prC = create(proc,2000,50,"proc C",1,'C'));
 
 		while(count++<LOOP){
 			kprintf("M");

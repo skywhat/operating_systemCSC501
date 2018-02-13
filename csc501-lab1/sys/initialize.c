@@ -14,7 +14,7 @@
 #include <io.h>
 #include <stdio.h>
 
-#include "sched.h"
+#include "lab1.h"
 
 /*#define DETAIL */
 #define HOLESIZE	(600)	

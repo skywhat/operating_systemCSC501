@@ -1,5 +1,5 @@
-#ifndef _SCHED_H_
-#define _SCHED_H_
+#ifndef _LAB1_H_
+#define _LAB1_H_
 
 #define DEFAULTSCHED 0
 #define RANDOMSCHED 1

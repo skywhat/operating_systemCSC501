@@ -5,7 +5,7 @@
 #include <proc.h>
 #include <q.h>
 
-#include "sched.h"
+#include "lab1.h"
 
 
 unsigned long currSP;	/* REAL sp of current process */
@@ -31,10 +31,12 @@ int resched()
 			optr->pstate=PRREADY;	
 			insert(currpid,rdyhead,optr->pprio);
 		}
+		/* only Null process exists */
 		if(q[rdytail].qprev==NULLPROC){
 			next_pid=0;
 		}
 		else{
+			/* generate a random number between 0 and total-sum minus 1 (e.g. 0 to 59)*/
 			int sum=0;
 			int ind=q[rdytail].qprev;
 			while(ind!=rdyhead){
@@ -73,6 +75,7 @@ int resched()
 			}
 		}
 		if(isnewepoch==TRUE){
+			/*  recalculate the time quantum of all processes (including blocked ones). */
 			for(i=0;i<NPROC;++i){
 				if(proctab[i].pstate==PRFREE)
 					continue;
