@@ -60,6 +60,12 @@ struct	pentry	{
 	int	fildes[_NFILE];		/* file - device translation	*/
 	int	ppagedev;		/* pageing dgram device		*/
 	int	pwaitret;
+
+	/* modified */
+	int pinh; /* the current inherited priority of the process */
+	int lockheld[NLOCKS]; /* all the locks held by the process can be found */
+	int lockid;/* indicating the lock descriptor in whose wait queue the process is blocked.*/
+	int poprio;/* The original priority (pprio) with which a process is created.  */
 };
 
 
