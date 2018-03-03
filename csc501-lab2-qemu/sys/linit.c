@@ -9,12 +9,12 @@
 
 struct lentry locks[NLOCKS];
 int nextlock;
-int lockhold[NPROC][NLOCKS];
 
 int lockaround;
 
 void linit(){
 	struct lentry *lptr;
+	lockaround=0;
 	nextlock=NLOCKS-1;
 	int i,j;
 	for(i=0;i<NLOCKS;++i){
@@ -22,7 +22,10 @@ void linit(){
 		lptr->lstate=LFREE;
 		lptr->lqtail=1+(lptr->lqhead= newqueue());
 		lptr->lprio=-1;
-		lptr->nreaders=0;
-		lptr->nwriters=0;
+
+		for(j=0;j<NPROC;++j){
+			lptr->pidheld[j]=0;
+		}
+
 	}
 }

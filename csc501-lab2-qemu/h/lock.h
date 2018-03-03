@@ -15,6 +15,8 @@
 
 #define isbadlock(l) (l<0 || l>=NLOCKS)
 
+#define LOCKMAXAROUND 1000
+
 /* lock table entry */
 struct lentry{
 	char lstate; /* the state LFREE or LUSED */
@@ -23,7 +25,7 @@ struct lentry{
 	int lqtail; /* q index of tail of list */
 	int nreaders;/* count for readers */
 	int nwriters;/* count for writers */
-	int lprio; /* indicating the maximum priority among all the processes waiting in the lock's wait queue. */
+	int lprio; /* maximum priority among all the processes waiting in the lock's wait queue. */
 	int pidheld[NPROC];/*ids of the processes currently holding the lock.*/
 };
 
@@ -33,11 +35,13 @@ extern unsigned long ctr1000;
 
 extern void linit();
 extern int lcreate();
-extern int ldelete(int lid);
+extern int ldelete(int lockdescriptor);
 extern int lock(int ldes1,int type,int priority);
 extern int releaseall(int numlocks,int ldes1, ...);
+
+extern void newlprio(int lock);
+extern void newpinh(int pid);
 
 extern int lockaround;/* generate ldes */
 
 #endif
-

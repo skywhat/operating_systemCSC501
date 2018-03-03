@@ -14,6 +14,9 @@
 #include <io.h>
 #include <stdio.h>
 
+/*modified*/
+#include<lock.h>
+
 /*#define DETAIL */
 #define HOLESIZE	(600)	
 #define	HOLESTART	(640 * 1024)
@@ -197,6 +200,9 @@ LOCAL int sysinit()
 	    init_dev(i);
 	}
 #endif
+
+	/*modified*/
+	linit();
 
 	return(OK);
 }

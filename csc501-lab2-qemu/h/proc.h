@@ -28,6 +28,9 @@
 #define	PRWAIT		'\007'		/* process is on semaphore queue*/
 #define	PRTRECV		'\010'		/* process is timing a receive	*/
 
+/*modified*/
+#define PRLOCK      '\011'      /* process is locked  */
+
 /* miscellaneous process definitions */
 
 #define	PNMLEN		16		/* length of process "name"	*/
@@ -61,11 +64,12 @@ struct	pentry	{
 	int	ppagedev;		/* pageing dgram device		*/
 	int	pwaitret;
 
-	/* modified */
+	/* modified */ /*initialize in initialize.c */
 	int pinh; /* the current inherited priority of the process */
 	int lockheld[NLOCKS]; /* all the locks held by the process can be found */
 	int lockid;/* indicating the lock descriptor in whose wait queue the process is blocked.*/
 	int poprio;/* The original priority (pprio) with which a process is created.  */
+	int plockret;
 };
 
 

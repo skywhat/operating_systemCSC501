@@ -1,6 +1,6 @@
 #!/bin/bash
 
-h_files=(lock.h proc.h)
+h_files=(lock.h proc.h q.h)
 sys_files=(linit.c lcreate.c ldelete.c lock.c releaseall.c initialize.c)
 
 
