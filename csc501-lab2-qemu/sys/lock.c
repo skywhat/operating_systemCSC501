@@ -94,6 +94,9 @@ SYSCALL lock(int ldes1, int type, int priority){
 
 }
 
+/* update the pinh of the low priority process holding the lock */
+
+
 void newpinh(int pid){
 	int i,pmaxprio=-1;
 	for(i=0;i<NLOCKS;++i){
