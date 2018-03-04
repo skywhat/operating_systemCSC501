@@ -1,10 +1,10 @@
 /* releaseall.c - releaseall */
 
 #include<kernel.h>
-#include<conf.h>
 #include<proc.h>
 #include<stdio.h>
 #include<lock.h>
+#include<q.h>
 
 LOCAL void admit_valid_readers(int lock);
 
@@ -13,9 +13,9 @@ LOCAL void release(int lock,int tmppid);
 int releaseall(int numlocks, int ldes1, ...){
   STATWORD ps;
 
-  int i,j;
+  int i;
   int ldes;
-  int lock,lockard,nextlock;
+  int lock,lockard;
   register struct lentry *lptr;
   unsigned long *a=(unsigned long *)(&ldes1);
   /* for equal lock priorities */
@@ -94,7 +94,7 @@ the reader should be given preference to acquire the lock over the waiting write
       if(q[tmppid].qtype==READ && lptr->nwriters==0){
         admit_valid_readers(lock);
       }
-      else if(q[tmppid.qtype==WRITE && lptr->nreaders==0]){
+      else if(q[tmppid].qtype==WRITE && lptr->nreaders==0){
         release(lock,tmppid);
       }
       else{
@@ -124,6 +124,7 @@ else{
 
 /* release the specific one in the wait queue */
 LOCAL void release(int lock,int tmppid){
+	int i;
     register struct lentry *lptr=&locks[lock];
     if(q[tmppid].qtype==READ){
       lptr->nreaders++;

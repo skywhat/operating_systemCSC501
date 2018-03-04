@@ -4,7 +4,6 @@
 #include <proc.h>
 #include <lock.h>
 #include <stdio.h>
-#include <lock.h>
 
 #define DEFAULT_LOCK_PRIO 20
 
@@ -12,6 +11,7 @@
             kprintf(error);\
             return;\
             }
+
 int mystrncmp(char* des,char* target,int n){
     int i;
     for (i=0;i<n;i++){
@@ -191,7 +191,9 @@ int main( )
          * The provided results do not guarantee your correctness.
          * You need to read the PA2 instruction carefully.
          */
+	kprintf("\ntest1 start here\n");
 	test1();
+	test2();
 
 
         /* The hook to shutdown QEMU for process-like execution of XINU.

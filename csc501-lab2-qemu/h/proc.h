@@ -9,6 +9,10 @@
 #define	NPROC		30		/*  allowed if not already done	*/
 #endif
 
+#ifndef NLOCKS
+#define NLOCKS 50
+#endif
+
 #ifndef	_NFILE
 #define _NFILE		20		/* # of files allowed */
 #endif

@@ -30,7 +30,6 @@ struct lentry{
 };
 
 extern struct lentry locks[];
-extern int nextlock;
 extern unsigned long ctr1000;
 
 extern void linit();
@@ -43,5 +42,5 @@ extern void newlprio(int lock);
 extern void newpinh(int pid);
 
 extern int lockaround;/* generate ldes */
-
+extern int nextlock;
 #endif

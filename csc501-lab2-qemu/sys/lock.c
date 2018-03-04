@@ -19,8 +19,7 @@ SYSCALL lock(int ldes1, int type, int priority){
 	struct lentry *lptr;
 	struct pentry *pptr;
 
-	int nreaders, nwriters;
-	int i,j;
+	int i,lmaxprio;
 
 	disable(ps);
 
@@ -30,22 +29,20 @@ SYSCALL lock(int ldes1, int type, int priority){
 		restore(ps);
 		return(SYSERR);
 	}
-	int nreaders=lptr->nreaders;
-	int nwriters=lptr->nwriters;
 
-	if(nreaders==0&&nwriters!=0){
+	if(lptr->nreaders==0&&lptr->nwriters!=0){
 		wait=TRUE;
 		/* write lock here */
 	}
-	else if(nreaders!=0&&nwriters==0&& type==WRITE){
+	else if(lptr->nreaders!=0&&lptr->nwriters==0&& type==WRITE){
 		wait=TRUE;
 		/* read lock now but requested by write*/
 	}
-	else if(nreaders!=0&&nwriters==0&& type==READ){
-		int lmaxprio=q[lptr->lqtail].qprev;
+	else if(lptr->nreaders!=0&&lptr->nwriters==0&& type==READ){
+		lmaxprio=q[lptr->lqtail].qprev;
 		/* any higher priority writer process waiting for the lock*/
 		while(priority<q[lmaxprio].qkey){
-			if(q[lmaxpiro].qtype==WRITE){
+			if(q[lmaxprio].qtype==WRITE){
 				wait=TRUE;
 			}
 			lmaxprio=q[lmaxprio].qprev;
@@ -99,14 +96,19 @@ SYSCALL lock(int ldes1, int type, int priority){
 
 void newpinh(int pid){
 	int i,pmaxprio=-1;
+	int priocompare,tmppid;
+	register struct lentry *lptr;
+	register struct pentry *pptr=&proctab[pid];
 	for(i=0;i<NLOCKS;++i){
 		if(proctab[pid].lockheld[i]==1){
-			if(locks[i].lprio>pmaxprio){
-				pmaxprio=locks[i].lprio;
+			lptr=&locks[i];
+			if(pmaxprio<lptr->lprio){
+				pmaxprio=lptr->lprio;
 			}
 		}
+		
 	}
-	if(proctab[pid].pprio>pmaxprio){
+	if(pptr->pprio>pmaxprio){
 		proctab[pid].pinh=0;
 	}
 	else{
@@ -115,18 +117,19 @@ void newpinh(int pid){
 }
 
 /*
- indicating the maximum priority among all the processes
+ indicating the maximum scheduling priority among all the processes
 waiting in the lock's wait queue.
 */
 void newlprio(int lock){
-	int maxprioinwait=-1;
+	int maxprio=-1,priocompare;
 	struct lentry *tmplptr=&locks[lock];
 	int curlockid=q[tmplptr->lqtail].qprev;
 	while(curlockid!=tmplptr->lqhead){
-		if(q[curlockid].qkey>maxprioinwait){
-			maxprioinwait=q[curlockid].qkey;
+		priocompare=(proctab[curlockid].pinh==0?proctab[curlockid].pprio:proctab[curlockid].pinh);
+		if(priocompare>maxprio){
+			maxprio=priocompare;
 		}
 		curlockid=q[curlockid].qprev;
 	}
-	tmplptr->lprio=maxprioinwait;
+	tmplptr->lprio=maxprio;
 }

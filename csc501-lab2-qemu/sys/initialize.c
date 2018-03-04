@@ -17,7 +17,7 @@
 /*modified*/
 #include<lock.h>
 
-/*#define DETAIL */
+/*#define DETAIL*/
 #define HOLESIZE	(600)	
 #define	HOLESTART	(640 * 1024)
 #define	HOLEEND		((1024 + HOLESIZE) * 1024)  
@@ -198,14 +198,14 @@ LOCAL int sysinit()
 	mon_init();	/* init monitor */
 //	ripinit();
 
+	/*modified*/
+	linit();
 #ifdef NDEVS
 	for (i=0 ; i<NDEVS ; i++ ) {	    
 	    init_dev(i);
 	}
 #endif
 
-	/*modified*/
-	linit();
 
 	return(OK);
 }

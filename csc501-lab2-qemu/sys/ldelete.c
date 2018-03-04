@@ -27,7 +27,7 @@ SYSCALL ldelete(int lockdescriptor){
 
 
 /*awakens all the waiting processes by moving them from the lock queue to the ready list.*/	
-	if(nonemptry(lptr->lqhead)){
+	if(nonempty(lptr->lqhead)){
 		while((pid=getfirst(lptr->lqhead))!=EMPTY){
 			proctab[pid].plockret=DELETED;
 			ready(pid,RESCHNO);

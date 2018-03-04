@@ -21,8 +21,9 @@ int resched()
 	register struct	pentry	*nptr;	/* pointer to new process entry */
 
 
+	/**/
 	int tmppid=q[rdytail].qprev;
-	int	reschedpid,reschedprio;
+	int	reschedpid,reschedprio=-1;
 	while(tmppid!=rdyhead){
 		if(proctab[tmppid].pinh==0){
 			if(proctab[tmppid].pprio>reschedprio){
@@ -36,6 +37,7 @@ int resched()
 				reschedpid=tmppid;
 			}
 		}
+		tmppid=q[tmppid].qprev;
 	}
 
 

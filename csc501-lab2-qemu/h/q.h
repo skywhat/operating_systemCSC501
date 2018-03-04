@@ -17,7 +17,7 @@ struct	qent	{		/* one for each process plus two for	*/
 	int	qprev;		/* pointer to previous process or head	*/
 
 	/*modified*/
-	int qtime;   /* for waiting time computing */
+	unsigned long qtime;   /* for waiting time computing */
 	int qtype;  /* for lock queue, READ or WRITE */
 };
 
