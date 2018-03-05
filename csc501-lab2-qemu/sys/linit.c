@@ -21,7 +21,7 @@ void linit(){
 		lptr=&locks[i];
 		lptr->lstate=LFREE;
 		lptr->lqtail=1+(lptr->lqhead= newqueue());
-		lptr->lprio=-1;
+		lptr->lprio=0;
 
 		for(j=0;j<NPROC;++j){
 			lptr->pidheld[j]=0;
