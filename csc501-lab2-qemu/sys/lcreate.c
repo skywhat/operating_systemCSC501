@@ -38,7 +38,7 @@ LOCAL int newlock(){
 			locks[lock].lstate=LUSED;
 			locks[lock].nreaders=0;
 			locks[lock].nwriters=0;
-			return (i*LOCKMAXAROUND+lockaround);
+			return (lock*LOCKMAXAROUND+lockaround);
 		}
 	}	
 	return (SYSERR);

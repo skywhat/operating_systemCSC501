@@ -12,7 +12,6 @@ LOCAL void release(int lock,int tmppid);
 
 int releaseall(int numlocks, int ldes1, ...){
   STATWORD ps;
-
   int i;
   int ldes;
   int lock,lockard;
@@ -95,10 +94,9 @@ the reader should be given preference to acquire the lock over the waiting write
         admit_valid_readers(lock);
       }
       else if(q[tmppid].qtype==WRITE && lptr->nreaders==0){
-        release(lock,tmppid);
+		  release(lock,tmppid);
       }
       else{
-        kprintf("releaseall error");
       }
   }
 
@@ -166,6 +164,7 @@ LOCAL void admit_valid_readers(int lock){
   while(tmppid!=lptr->lqhead){
     if(q[tmppid].qtype==WRITE && q[tmppid].qkey>maxpriowriter){
       maxpriowriter=q[tmppid].qkey;
+	  break;
     }
     tmppid=q[tmppid].qprev;
   }
@@ -177,5 +176,8 @@ LOCAL void admit_valid_readers(int lock){
       release(lock,tmppid);
       tmppid=help;
     }
+	else{
+	tmppid=q[tmppid].qprev;
+	}
   }
 }

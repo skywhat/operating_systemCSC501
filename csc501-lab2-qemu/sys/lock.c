@@ -10,8 +10,8 @@
 SYSCALL lock(int ldes1, int type, int priority){
 	STATWORD ps;
 
-	/* help me check lock */
-	Bool wait=FALSE;
+	/* help me check lock if this process need wait*/
+	Bool needwait=FALSE;
 
 	int lock=ldes1/LOCKMAXAROUND;
 	int lockard=ldes1-lock*LOCKMAXAROUND;
@@ -31,25 +31,26 @@ SYSCALL lock(int ldes1, int type, int priority){
 	}
 
 	if(lptr->nreaders==0&&lptr->nwriters!=0){
-		wait=TRUE;
+		needwait=TRUE;
 		/* write lock here */
 	}
-	else if(lptr->nreaders!=0&&lptr->nwriters==0&& type==WRITE){
-		wait=TRUE;
+	else if(lptr->nreaders!=0&&lptr->nwriters==0 && type==WRITE){
+		needwait=TRUE;
 		/* read lock now but requested by write*/
 	}
-	else if(lptr->nreaders!=0&&lptr->nwriters==0&& type==READ){
+	else if(lptr->nreaders!=0&&lptr->nwriters==0 && type==READ){
 		lmaxprio=q[lptr->lqtail].qprev;
 		/* any higher priority writer process waiting for the lock*/
 		while(priority<q[lmaxprio].qkey){
 			if(q[lmaxprio].qtype==WRITE){
-				wait=TRUE;
+				needwait=TRUE;
+				break;
 			}
 			lmaxprio=q[lmaxprio].qprev;
 		}
 	}
 
-	if(wait==TRUE){
+	if(needwait==TRUE){
 		pptr=&proctab[currpid];
 		pptr->pstate=PRLOCK;
 		pptr->lockid=ldes1/LOCKMAXAROUND;
@@ -82,11 +83,11 @@ SYSCALL lock(int ldes1, int type, int priority){
 		else if(type==WRITE){
 			lptr->nwriters++;
 		}
-			lptr->pidheld[currpid]=1;
-			proctab[currpid].lockheld[lock]=1;
-			newpinh(currpid);
-			restore(ps);
-			return (OK);
+		lptr->pidheld[currpid]=1;
+		proctab[currpid].lockheld[lock]=1;
+		newpinh(currpid);
+		restore(ps);
+		return (OK);
 	}
 
 }
