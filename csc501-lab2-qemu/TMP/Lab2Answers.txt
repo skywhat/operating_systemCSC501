@@ -1,0 +1,20 @@
+1.The priority inversion problem could cause that a higher-priority process needs to wait for the completion of a lower-priority process.
+      1.Priority inheritance is one approach to address this issue. Please give another approach and briefly describe its idea.
+      2.Design a test case to show that your approach can address the priority inversion problem. You should compare the results
+      that derived from the original XINU implementation (use semaphore) and that derived from your implementation (use readers/writer locks).
+      Put your results in Lab2Answers.txt and your test case program (name it task1.c) in both ./sys and ./TMP
+
+      1.random boosting
+      The priority of ready threads holding locks could be boosted randomly and then allowed to run to exit the critical section.
+      If the thread doesn't get enough time to exit, it will get another chance later.
+
+      2.
+
+
+
+2.Synchronization is a quite complex issue in operating systems. To show your understanding about process synchronization,
+you are asked to point out a reader/writer synchronization issue in this pesudo-code: task2_sync_issue.c.
+Multiple reader threads can execute this code concurrently by calling do_update.
+All the variables starting with global_ are global variables.
+You are asked to describe the potential issue caused by the incorrect synchronization
+and point out at least one possible thread interleaving that would trigger the problem. Put your answer in Lab2Answers.txt mentioned above.

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 h_files=(lock.h proc.h q.h)
-sys_files=(linit.c lcreate.c ldelete.c lock.c releaseall.c initialize.c resched.c getprio.c create.c kill.c getprio.c chprio.c)
+sys_files=(linit.c lcreate.c ldelete.c lock.c releaseall.c initialize.c resched.c getprio.c create.c kill.c getprio.c chprio.c task1.c)
 
 
 i="0"
