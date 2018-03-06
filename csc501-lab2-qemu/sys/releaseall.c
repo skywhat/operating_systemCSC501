@@ -26,7 +26,7 @@ int releaseall(int numlocks, int ldes1, ...){
 
   disable(ps);
 
-  for(;numlocks>0;numlocks--){
+  while(numlocks-->0){
     ldes=*a++;
     lock=ldes/LOCKMAXAROUND;
 
@@ -95,8 +95,6 @@ the reader should be given preference to acquire the lock over the waiting write
       else if(q[tmppid].qtype==WRITE && lptr->nreaders==0){
 		  release(lock,tmppid);
       }
-      else{
-      }
   }
 
 
@@ -123,12 +121,7 @@ else{
 LOCAL void release(int lock,int tmppid){
 	int i;
     register struct lentry *lptr=&locks[lock];
-    if(q[tmppid].qtype==READ){
-      lptr->nreaders++;
-    }
-    else if(q[tmppid].qtype==WRITE){
-      lptr->nwriters++;
-    }
+	q[tmppid].qtype==READ?lptr->nreaders++:lptr->nwriters++;
 
     lptr->pidheld[tmppid]=1;
     proctab[currpid].lockheld[lock]=1;
