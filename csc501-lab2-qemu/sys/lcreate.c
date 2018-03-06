@@ -31,6 +31,7 @@ LOCAL int newlock(){
 	for(i=0;i<NLOCKS;++i){
 		lock=nextlock--;
 		if(nextlock<0){
+			/* next NLOCKS around */
 			nextlock=NLOCKS-1;
 			lockaround++;
 		}
@@ -41,5 +42,6 @@ LOCAL int newlock(){
 			return (lock*LOCKMAXAROUND+lockaround);
 		}
 	}	
+	/*no lockid available */
 	return (SYSERR);
 }

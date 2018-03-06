@@ -68,11 +68,11 @@ struct	pentry	{
 	int	ppagedev;		/* pageing dgram device		*/
 	int	pwaitret;
 
-	/* modified */ /*initialize in initialize.c */
-	int pinh; /* the current inherited priority of the process */
-	int lockheld[NLOCKS]; /* all the locks held by the process can be found */
-	int lockid;/* indicating the lock descriptor in whose wait queue the process is blocked.*/
-	int poprio;/* The original priority (pprio) with which a process is created.  */
+	/* modified */ /*initialize in initialize.c and create.c */
+	int pinh; /* the current inherited priority of the process default: 0*/
+	int lockheld[NLOCKS]; /* all the locks held by the process can be found  default: 0*/
+	int lockid;/* indicating the lock descriptor in whose wait queue the process is blocked. default: -1 */
+	/*int poprio*/;/* The original priority (pprio) with which a process is created.  */
 	int plockret;
 };
 

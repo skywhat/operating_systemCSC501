@@ -14,7 +14,7 @@ int releaseall(int numlocks, int ldes1, ...){
   STATWORD ps;
   int i;
   int ldes;
-  int lock,lockard;
+  int lock;
   register struct lentry *lptr;
   unsigned long *a=(unsigned long *)(&ldes1);
   /* for equal lock priorities */
@@ -29,10 +29,9 @@ int releaseall(int numlocks, int ldes1, ...){
   for(;numlocks>0;numlocks--){
     ldes=*a++;
     lock=ldes/LOCKMAXAROUND;
-    lockard=ldes-lock*LOCKMAXAROUND;
 
     lptr=&locks[lock];
-    if(isbadlock(lock) || lptr->lstate==LFREE || lockard!=lockaround){
+    if(lock_err(ldes)){
       not_held=TRUE;
       continue;
     }

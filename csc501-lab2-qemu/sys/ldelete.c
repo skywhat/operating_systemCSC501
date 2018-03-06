@@ -13,11 +13,10 @@ SYSCALL ldelete(int lockdescriptor){
 
 	int pid;
 	int lock=lockdescriptor/LOCKMAXAROUND;
-	int lockard=lockdescriptor-lock*LOCKMAXAROUND;
 
 	disable(ps);
 
-	if(isbadlock(lock) || locks[lock].lstate==LFREE || lockard!=lockaround){
+	if(lock_err(lockdescriptor)){
 		restore(ps);
 		return (SYSERR);
 	}

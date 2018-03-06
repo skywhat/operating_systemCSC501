@@ -22,6 +22,11 @@ SYSCALL chprio(int pid, int newprio)
 		return(SYSERR);
 	}
 	pptr->pprio = newprio;
+	newpinh(pid);
+
+	if(pptr->pstate== PRLOCK){
+		newlprio(pptr->lockid);	
+	}
 	restore(ps);
 	return(newprio);
 }

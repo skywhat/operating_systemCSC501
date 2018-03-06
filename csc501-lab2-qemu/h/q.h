@@ -7,6 +7,7 @@
 
 /* modified */
 #ifndef	NQENT
+/*modified*/
 #define	NQENT		NPROC + NSEM + NSEM + 4 + NLOCKS + NLOCKS	/* for ready & sleep	*/
 #endif
 
@@ -18,7 +19,7 @@ struct	qent	{		/* one for each process plus two for	*/
 
 	/*modified*/
 	unsigned long qtime;   /* for waiting time computing */
-	int qtype;  /* for lock queue, READ or WRITE */
+	int qtype;  /* for lock wait queue, READ or WRITE */
 };
 
 extern	struct	qent q[];

@@ -14,7 +14,6 @@ SYSCALL lock(int ldes1, int type, int priority){
 	Bool needwait=FALSE;
 
 	int lock=ldes1/LOCKMAXAROUND;
-	int lockard=ldes1-lock*LOCKMAXAROUND;
 
 	struct lentry *lptr;
 	struct pentry *pptr;
@@ -25,9 +24,9 @@ SYSCALL lock(int ldes1, int type, int priority){
 
 	lptr=&locks[lock];
 	/* lock is invalid or not created.  */
-	if(isbadlock(lock) || lptr->lstate==LFREE || lockard!=lockaround){
+	if(lock_err(ldes1)){
 		restore(ps);
-		return(SYSERR);
+		return (SYSERR);
 	}
 
 	if(lptr->nreaders==0&&lptr->nwriters!=0){
@@ -50,7 +49,7 @@ SYSCALL lock(int ldes1, int type, int priority){
 		}
 	}
 
-	if(needwait==TRUE){
+	if(needwait){
 		pptr=&proctab[currpid];
 		pptr->pstate=PRLOCK;
 		pptr->lockid=ldes1/LOCKMAXAROUND;
@@ -77,12 +76,7 @@ SYSCALL lock(int ldes1, int type, int priority){
 		return pptr->plockret;
 	}
 	else{
-		if(type==READ){
-			lptr->nreaders++;
-		}
-		else if(type==WRITE){
-			lptr->nwriters++;
-		}
+		type==READ?lptr->nreaders++:lptr->nwriters++;
 		lptr->pidheld[currpid]=1;
 		proctab[currpid].lockheld[lock]=1;
 		newpinh(currpid);
@@ -92,8 +86,14 @@ SYSCALL lock(int ldes1, int type, int priority){
 
 }
 
+	/* lock is invalid or not created.  */
+Bool lock_err(int ldes){
+	int lock=ldes/LOCKMAXAROUND;
+	int lockard=ldes-lock*LOCKMAXAROUND;
+	register struct lentry *lptr=&locks[lock];
+	return (isbadlock(lock) || lptr->lstate==LFREE || lockard!=lockaround)?TRUE:FALSE;
+}
 /* update the pinh of the low priority process holding the lock */
-
 
 void newpinh(int pid){
 	int i,pmaxprio=-1;
@@ -109,12 +109,7 @@ void newpinh(int pid){
 		}
 		
 	}
-	if(pptr->pprio>pmaxprio){
-		proctab[pid].pinh=0;
-	}
-	else{
-		proctab[pid].pinh=pmaxprio;
-	}
+	proctab[pid].pinh=(pptr->pprio>pmaxprio)?0:pmaxprio;
 }
 
 /*

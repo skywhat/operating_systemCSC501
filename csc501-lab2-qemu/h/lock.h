@@ -13,9 +13,10 @@
 #define LFREE '\01'
 #define LUSED '\02'
 
+/* invalid lockid */
 #define isbadlock(l) (l<0 || l>=NLOCKS)
 
-#define LOCKMAXAROUND 1000
+#define LOCKMAXAROUND 10000
 
 /* lock table entry */
 struct lentry{
@@ -25,8 +26,8 @@ struct lentry{
 	int lqtail; /* q index of tail of list */
 	int nreaders;/* count for readers */
 	int nwriters;/* count for writers */
-	int lprio; /* maximum priority among all the processes waiting in the lock's wait queue. */
-	int pidheld[NPROC];/*ids of the processes currently holding the lock.*/
+	int lprio; /* maximum schedluing priority among all the processes waiting in the lock's wait queue. */
+	int pidheld[NPROC];/*ids of the processes currently holding the lock. default: 0*/
 };
 
 extern struct lentry locks[];
@@ -41,6 +42,7 @@ extern int releaseall(int numlocks,int ldes1, ...);
 extern void newlprio(int lock);
 extern void newpinh(int pid);
 
+extern Bool lock_err(int ldes);
 extern int lockaround;/* generate ldes */
-extern int nextlock;
+extern int nextlock; /* the lockid can be used. */
 #endif

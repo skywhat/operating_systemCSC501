@@ -12,8 +12,9 @@ int nextlock;
 
 int lockaround;
 
+/* call in initialize.c */
 void linit(){
-	struct lentry *lptr;
+	register struct lentry *lptr;
 	lockaround=0;
 	nextlock=NLOCKS-1;
 	int i,j;

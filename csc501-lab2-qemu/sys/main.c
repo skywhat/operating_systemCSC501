@@ -191,6 +191,8 @@ int main( )
          * The provided results do not guarantee your correctness.
          * You need to read the PA2 instruction carefully.
          */
+	test1();
+	test2();
 	test3();
 
 
