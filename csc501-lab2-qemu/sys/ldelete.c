@@ -15,14 +15,14 @@ SYSCALL ldelete(int lockdescriptor){
 	int lock=lockdescriptor/LOCKMAXAROUND;
 
 	disable(ps);
-
-	if(lock_err(lockdescriptor)){
+	int ret=lock_err(lockdescriptor);
+	if(ret==SYSERR||ret==DELETED){
 		restore(ps);
-		return (SYSERR);
+		return (ret);
 	}
 
 	lptr=&locks[lock];
-	lptr->lstate=LFREE;
+	lptr->lstate=LDELETED;
 
 
 /*awakens all the waiting processes by moving them from the lock queue to the ready list.*/	

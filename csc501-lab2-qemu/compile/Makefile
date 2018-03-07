@@ -479,7 +479,7 @@ releaseall.o: ../sys/releaseall.c ../h/kernel.h \
  ../h/stdio.h ../h/lock.h
  release.o: ../sys/release.c ../h/kernel.h \
  ../h/systypes.h ../h/conf.h ../h/mem.h ../h/proc.h ../h/stdio.h ../h/lock.h
- admitreaders.o: ../sys/admitreaders.c ../h/kernel ../h/systypes.h ../h/conf.h\
+ admitreaders.o: ../sys/admitreaders.c ../h/kernel.h ../h/systypes.h ../h/conf.h\
  ../h/mem.h ../h/proc.h ../h/stdio.h ../h/lock.h
 resched.o: ../sys/resched.c /usr/include/stdc-predef.h ../h/conf.h \
  ../h/kernel.h ../h/systypes.h ../h/mem.h ../h/proc.h ../h/q.h

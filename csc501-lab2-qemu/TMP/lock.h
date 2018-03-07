@@ -12,6 +12,7 @@
 /* lock state */
 #define LFREE '\01'
 #define LUSED '\02'
+#define LDELETED '\03'
 
 /* invalid lockid */
 #define isbadlock(l) (l<0 || l>=NLOCKS)
@@ -42,7 +43,7 @@ extern int releaseall(int numlocks,int ldes1, ...);
 extern void newlprio(int lock);
 extern void newpinh(int pid);
 
-extern Bool lock_err(int ldes);
+extern int lock_err(int ldes);
 extern int lockaround;/* generate ldes */
 extern int nextlock; /* the lockid can be used. */
 

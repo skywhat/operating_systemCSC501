@@ -29,7 +29,8 @@ int releaseall(int numlocks, int ldes1, ...){
     lock=ldes/LOCKMAXAROUND;
 
     lptr=&locks[lock];
-    if(lock_err(ldes)){
+	int ret=lock_err(ldes);
+    if(ret==SYSERR||ret==DELETED){
       not_held=TRUE;
       continue;
     }

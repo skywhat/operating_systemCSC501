@@ -25,7 +25,8 @@ int mystrncmp(char* des,char* target,int n){
 
 void reader1 (char *msg, int lck)
 {
-	lock (lck, READ, DEFAULT_LOCK_PRIO);
+	int ret=lock (lck, READ, DEFAULT_LOCK_PRIO);
+	assert(ret!=SYSERR&&ret!=DELETED,"lock failed.\n");
 	kprintf ("  %s: acquired lock, sleep 2s\n", msg);
 	sleep (2);
 	kprintf ("  %s: to release lock\n", msg);
@@ -117,7 +118,7 @@ void test2 ()
 
         sleep (15);
         kprintf("output=%s\n", output2);
-        assert(mystrncmp(output2,"ABABDDCCEE",10)==0,"Test 2 FAILED\n");
+        assert(mystrncmp(output2,"ABABDDCCEE",10)==0||mystrncmp(output2,"ABDADBCCEE",10)==0,"Test 2 FAILED\n");
         kprintf ("Test 2 OK\n");
 }
 
@@ -225,10 +226,10 @@ void test4 ()
         int     lck1, lck2;
 		int a,b,c;
 
-        kprintf("\nTest 3: test the basic priority inheritence\n");
+        kprintf("\nTest 4: test the basic priority inheritence\n");
         lck1  = lcreate ();
         lck2  = lcreate ();
-        assert (lck1 != SYSERR && lck2 != SYSERR, "Test 3 failed");
+        assert (lck1 != SYSERR && lck2 != SYSERR, "Test 4 failed");
 
          c = create(C, 2000, 50, "writer3", 2, 'C', lck1);
          b = create(B, 2000, 40, "writer3", 2, 'B', lck2);
@@ -259,37 +260,40 @@ void test4 ()
 void reader5 (char *msg, int lck)
 {
 lock (lck, READ, DEFAULT_LOCK_PRIO);
-kprintf (" %s: acquired lock, sleep 5s\n", msg);
-sleep (5);
+kprintf (" %s: acquired lock, sleep 3s\n", msg);
+sleep (3);
 kprintf (" %s: to release lock\n", msg);
 releaseall (1, lck);
+kprintf(" delete lck1\n");
 ldelete (lck); //====================================================
 }
 
 void test5 ()
 {
-int	lck,lck1;
+int	lck1,lck2;
 int	pid1;
 int	pid2;
 int pid3;
 
-kprintf("\nTest 1: readers can share the rwlock\n");
-lck = lcreate ();
-assert (lck != SYSERR, "Test 1 failed");
+kprintf("\nTest 5: readers can share the rwlock\n");
+lck1 = lcreate ();
+assert (lck1 != SYSERR, "Test 5 failed");
 
-pid1 = create(reader1, 2000, 20, "reader a", 2, "A", lck);
-pid2 = create(reader1, 2000, 20, "reader b", 2, "B", lck);
+pid1 = create(reader5, 2000, 20, "reader a", 2, "A", lck1);
+pid2 = create(reader1, 2000, 20, "reader b", 2, "B", lck1);
 
 
 resume(pid1);
-sleep (10); //========================================================
-lck1 = lcreate (); //=====================================================
-pid3 = create(reader1, 2000, 20, "reader c", 2, "C", lck1); //==================================
-resume(pid3);
+sleep (5); //========================================================
+lck2 = lcreate (); //=====================================================
+pid3 = create(reader1, 2000, 20, "reader c", 2, "C", lck2); //==================================
 resume(pid2);
+kprintf("lck1 has been deleted, B won't work.\n");
+resume(pid3);
 
+sleep(5);
 
-kprintf ("Test 1 ok\n");
+kprintf ("Test 5 ok\n");
 }
 
 int main( )
@@ -298,6 +302,10 @@ int main( )
          * The provided results do not guarantee your correctness.
          * You need to read the PA2 instruction carefully.
          */
+	test1();
+	test2();
+	test3();
+	test4();
 	test5();
 
         /* The hook to shutdown QEMU for process-like execution of XINU.

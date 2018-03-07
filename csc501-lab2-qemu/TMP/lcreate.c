@@ -35,7 +35,7 @@ LOCAL int newlock(){
 			nextlock=NLOCKS-1;
 			lockaround++;
 		}
-		if(locks[lock].lstate==LFREE){
+		if(locks[lock].lstate!=LUSED){
 			locks[lock].lstate=LUSED;
 			locks[lock].nreaders=0;
 			locks[lock].nwriters=0;
