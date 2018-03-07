@@ -9,6 +9,28 @@
       If the thread doesn't get enough time to exit, it will get another chance later.
 
       2.
+		set writer A priority 20, set writer B priority 30, set writer C priority 25.
+		A hold the lock at first. B then try to acquire the lock, A's priority should be boosted to 30 which is the same as B. then C has to wait until A and B release the lock.
+		as for the semaphore without priority inheritance, C would preempt A directly.
+
+lock with priority inheritance
+ A : to acquire lock
+ A : acquired lock 
+ B : to acquire lock
+ A : to release lock
+ B : acquired lock 
+ B : to release lock
+ C start to write
+ C write done.
+semaphore without priority inheritance
+ A : to wait
+ A : wait
+ B : to wait
+ C start to write
+ C write done.
+ A : to signal
+ B : wait
+ B : to signal
 
 
 
@@ -18,3 +40,5 @@ Multiple reader threads can execute this code concurrently by calling do_update.
 All the variables starting with global_ are global variables.
 You are asked to describe the potential issue caused by the incorrect synchronization
 and point out at least one possible thread interleaving that would trigger the problem. Put your answer in Lab2Answers.txt mentioned above.
+
+The function buffer_add is actually a writer process, as for the try_update, the code statement use a counting semaphore which is initialized to 10, cannot protect the critical section. And the do_update function use a reader lock to lock the process, which will allow other threads to execute at same time.

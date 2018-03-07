@@ -20,11 +20,14 @@ int resched()
 	register struct	pentry	*optr;	/* pointer to old process entry */
 	register struct	pentry	*nptr;	/* pointer to new process entry */
 
+	/*priority in the ready list*/
+
 
 	/**/
 	int tmppid=q[rdytail].qprev;
 	int	reschedpid,reschedprio=-1;
 	while(tmppid!=rdyhead){
+/*		kprintf("%d (%d) -> ",proctab[tmppid].pinh==0?proctab[tmppid].pprio:proctab[tmppid].pinh,tmppid);*/
 		if(proctab[tmppid].pinh==0){
 			if(proctab[tmppid].pprio>reschedprio){
 				reschedprio=proctab[tmppid].pprio;
