@@ -185,6 +185,85 @@ void test3 ()
         kprintf ("Test 3 OK\n");
 }
 
+void A (char *msg, int lck1, int lck2)
+{
+        kprintf ("  %s: to acquire lock1\n", msg);
+        lock (lck1, WRITE, DEFAULT_LOCK_PRIO);
+        kprintf ("  %s: acquired lock1, sleep 2s\n", msg);
+        sleep (2);
+
+        kprintf ("  %s: to acquire lock2\n", msg);
+        lock (lck2, WRITE, DEFAULT_LOCK_PRIO);
+        kprintf ("  %s: acquired lock2, sleep 2s\n", msg);
+        kprintf ("  %s: to release lock1, lock2\n", msg);
+
+        releaseall (1, lck1, lck2);
+}
+
+void B (char *msg, int lck1)
+{
+        kprintf ("  %s: to acquire lock1\n", msg);
+        lock (lck1, WRITE, DEFAULT_LOCK_PRIO);
+        kprintf ("  %s: acquired lock1, sleep 2s\n", msg);
+        sleep (5);
+
+        releaseall (1, lck1);
+}
+
+void C (char *msg, int lck1)
+{
+        sleep (3);
+        kprintf ("  %s: to acquire lock1\n", msg);
+        lock (lck1, WRITE, DEFAULT_LOCK_PRIO);
+        kprintf ("  %s: acquired lock1, sleep 2s\n", msg);
+        sleep(2);
+        releaseall (1, lck1);
+}
+
+void test4 ()
+{
+        int     lck1, lck2;
+        int     A, B, C;
+        // int     wr1;
+
+        kprintf("\nTest 3: test the basic priority inheritence\n");
+        lck1  = lcreate ();
+        lck2  = lcreate ();
+        assert (lck1 != SYSERR && lck2 != SYSERR, "Test 3 failed");
+
+         C = create(C, 2000, 30, "writer3", 2, "C", lck1);
+         B = create(B, 2000, 20, "writer3", 2, "B", lck1);
+        A = create(A, 2000, 10, "writer3", 3, "A", lck1, lck2);
+
+        kprintf("-start A\n");
+        resume(A);
+
+         kprintf("-start B\n");
+        resume(B);
+
+         kprintf("-start C\n");
+        resume(C);
+        sleep(1);
+        kprintf("prio A B C: %d %d %d", getprio(A), getprio(B), getprio(C));
+	 sleep (1);
+	// assert (getprio(wr1) == 30, "Test 3 failed");
+
+	// kprintf("-kill reader B, then sleep 1s\n");
+	//kill (rd2);
+	//sleep (1);
+	//assert (getprio(wr1) == 25, "Test 3 failed");
+
+	// kprintf("-kill reader A, then sleep 1s\n");
+	// kill (rd1);
+	// sleep(1);
+	// assert(getprio(wr1) == 20, "Test 3 failed");
+
+        sleep (8);
+        kprintf ("Test 4 OK\n");
+}
+
+
+
 int main( )
 {
         /* These test cases are only used for test purpose.
