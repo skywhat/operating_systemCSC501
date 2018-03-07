@@ -256,6 +256,40 @@ void test4 ()
 }
 
 
+void reader5 (char *msg, int lck)
+{
+lock (lck, READ, DEFAULT_LOCK_PRIO);
+kprintf (" %s: acquired lock, sleep 5s\n", msg);
+sleep (5);
+kprintf (" %s: to release lock\n", msg);
+releaseall (1, lck);
+ldelete (lck); //====================================================
+}
+
+void test5 ()
+{
+int	lck,lck1;
+int	pid1;
+int	pid2;
+
+kprintf("\nTest 1: readers can share the rwlock\n");
+lck = lcreate ();
+assert (lck != SYSERR, "Test 1 failed");
+
+pid1 = create(reader1, 2000, 20, "reader a", 2, "A", lck);
+pid2 = create(reader1, 2000, 20, "reader b", 2, "B", lck);
+
+
+resume(pid1);
+sleep (10); //========================================================
+lck1 = lcreate (); //=====================================================
+pid3 = create(reader1, 2000, 20, "reader c", 2, "C", lck1); //==================================
+resume(pid3);
+resume(pid2);
+
+
+kprintf ("Test 1 ok\n");
+}
 
 int main( )
 {
@@ -263,7 +297,7 @@ int main( )
          * The provided results do not guarantee your correctness.
          * You need to read the PA2 instruction carefully.
          */
-	test4();
+	test5();
 
         /* The hook to shutdown QEMU for process-like execution of XINU.
          * This API call exists the QEMU process.
