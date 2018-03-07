@@ -271,6 +271,7 @@ void test5 ()
 int	lck,lck1;
 int	pid1;
 int	pid2;
+int pid3;
 
 kprintf("\nTest 1: readers can share the rwlock\n");
 lck = lcreate ();
