@@ -73,17 +73,15 @@ SYSCALL lock(int ldes1, int type, int priority){
 			}
 		}
 		resched();
-		restore(ps);
-		return pptr->plockret;
 	}
 	else{
 		type==READ?lptr->nreaders++:lptr->nwriters++;
 		lptr->pidheld[currpid]=1;
 		pptr->lockheld[lock]=1;
 		newpinh(currpid);
-		restore(ps);
-		return (pptr->plockret);
 	}
+	restore(ps);
+	return (pptr->plockret);
 
 }
 
