@@ -1,5 +1,9 @@
 /* paging.h */
 
+#ifndef _PAGING_H_
+#define _PAGING_H_
+
+
 typedef unsigned int	 bsd_t;
 
 /* Structure for a page directory entry */
@@ -75,6 +79,11 @@ SYSCALL write_bs(char *, bsd_t, int);
 #define NBPG		4096	/* number of bytes per page	*/
 #define FRAME0		1024	/* zero-th frame		*/
 #define NFRAMES 	1024	/* number of frames		*/
+/*modified*/
+#define NBS 16 /* number of backing store */
+#define NPPBS 128 /* number of pages per backing store */
+
+
 
 #define BSM_UNMAPPED	0
 #define BSM_MAPPED	1
@@ -90,4 +99,7 @@ SYSCALL write_bs(char *, bsd_t, int);
 #define AGING 4
 
 #define BACKING_STORE_BASE	0x00800000
-#define BACKING_STORE_UNIT_SIZE 0x00100000
+/*modified*/
+#define BACKING_STORE_UNIT_SIZE 0x00080000
+
+#endif

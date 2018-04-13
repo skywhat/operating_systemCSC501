@@ -1,8 +1,9 @@
 #!/bin/bash
 
-h_files=()
-sys_files=()
+h_files=(paging.h)
+sys_files=(initialize.c i386.c main.c)
 compile_files=()
+paging_files=(xm.c vgetmem.c vfreemem.c bsm.c release_bs.c get_bs.c vcreate.c)
 
 i="0"
 while [ $i -lt ${#h_files[@]} ]
@@ -28,3 +29,13 @@ do
 	cp ./compile/${compile_files[i]} ./TMP/
 	i=$[$i+1]
 done
+
+i="0"
+while [ $i -lt ${#paging_files[@]} ]
+do
+	echo "cp ./paging/${paging_files[i]} ./TMP/"
+	cp ./paging/${paging_files[i]} ./TMP/
+	i=$[$i+1]
+done
+
+

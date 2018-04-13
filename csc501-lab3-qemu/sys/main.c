@@ -16,5 +16,8 @@ int main()
         /* The hook to shutdown QEMU for process-like execution of XINU.
          * This API call terminates the QEMU process.
          */
+	kprintf("sizeof WORD:%d\n",sizeof(WORD));
+	struct mblock *p;
+	kprintf("sizeof p:%d\n",sizeof(p));
         shutdown();
 }

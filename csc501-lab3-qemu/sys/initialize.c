@@ -49,6 +49,9 @@ int	console_dev;		/* the console device			*/
 /*  added for the demand paging */
 int page_replace_policy = SC;
 
+/* modified */
+bs_map_t bsm_tab[NBS];
+
 /************************************************************************/
 /***				NOTE:				      ***/
 /***								      ***/
@@ -169,6 +172,8 @@ sysinit()
 	for (i=0 ; i<NPROC ; i++)	/* initialize process table */
 		proctab[i].pstate = PRFREE;
 
+	
+
 
 #ifdef	MEMMARK
 	_mkinit();			/* initialize memory marking */
@@ -179,6 +184,9 @@ sysinit()
 #endif
 
 	mon_init();     /* init monitor */
+
+	/*modified*/
+	init_bsm();  /* init bsm */
 
 #ifdef NDEVS
 	for (i=0 ; i<NDEVS ; i++ ) {	    
