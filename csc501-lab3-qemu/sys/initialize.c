@@ -51,6 +51,7 @@ int page_replace_policy = SC;
 
 /* modified */
 bs_map_t bsm_tab[NBS];
+fr_map_t frm_tab[NFRAMES];
 
 /************************************************************************/
 /***				NOTE:				      ***/
@@ -65,6 +66,47 @@ bs_map_t bsm_tab[NBS];
 /***   not do I/O unless it uses kprintf for polled output.           ***/
 /***								      ***/
 /************************************************************************/
+
+
+/*------------------------------------------------------------------------
+ * demand paging initialize. set up page directory and page tables
+ *------------------------------------------------------------------------
+ */
+
+void init_paging(){
+	int i,j;
+	/* modified */
+	init_bsm();  /* init bsm */
+	init_frm(); /* init frm */
+
+	int frm_num=0;
+	pt_t *pt;
+	pd_t *pd;
+	for(i=0;i<4;++i){
+		get_frm(&frm_num);
+		frm_tab[frm_num].fr_type=FR_TBL;
+		frm_tab[frm_num].fr_status=FRM_MAPPED;
+		frm_tab[frm_num].fr_pid=NULLPROC;
+		pt=(FRAME0 + frm_num)*NBPG;
+		for(j=0;j<1024;++j){
+			pt->pt_pres=1;
+			pt->pt_write=1;
+			pt->pt_user=0;
+			pt->pt_pwt=0;
+			pt->pt_pcd=0;
+			pt->pt_acc=0;
+			pt->pt_dirty=0;
+			pt->pt_mbz=0;
+			pt->pt_global=1;
+			pt->pt_avail=0;
+			pt->pt_base=i*FRAME0 + j;
+			pt++;
+		}
+	}
+	create_page_dir(NULLPROC);
+	write_cr3(proctab[NULLPROC].pdbr);
+	enable_paging();
+}
 
 /*------------------------------------------------------------------------
  *  nulluser  -- initialize system and become the null process (id==0)
@@ -185,8 +227,6 @@ sysinit()
 
 	mon_init();     /* init monitor */
 
-	/*modified*/
-	init_bsm();  /* init bsm */
 
 #ifdef NDEVS
 	for (i=0 ; i<NDEVS ; i++ ) {	    
@@ -218,6 +258,8 @@ sysinit()
 
 	rdytail = 1 + (rdyhead=newqueue());/* initialize ready list */
 
+
+	init_paging();/* demand paging initialize */
 
 	return(OK);
 }

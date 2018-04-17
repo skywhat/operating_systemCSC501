@@ -1,9 +1,9 @@
 #!/bin/bash
 
 h_files=(paging.h)
-sys_files=(initialize.c i386.c main.c)
-compile_files=()
-paging_files=(xm.c vgetmem.c vfreemem.c bsm.c release_bs.c get_bs.c vcreate.c)
+sys_files=(initialize.c i386.c main.c create.c kill.c)
+compile_files=(Makefile)
+paging_files=(xm.c vgetmem.c vfreemem.c bsm.c release_bs.c get_bs.c vcreate.c policy.c frame.c pfint.c )
 
 i="0"
 while [ $i -lt ${#h_files[@]} ]

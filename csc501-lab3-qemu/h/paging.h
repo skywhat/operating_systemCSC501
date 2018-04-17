@@ -95,8 +95,10 @@ SYSCALL write_bs(char *, bsd_t, int);
 #define FR_TBL		1
 #define FR_DIR		2
 
+/*modified*/
 #define SC 3
 #define AGING 4
+#define LFU 5
 
 #define BACKING_STORE_BASE	0x00800000
 /*modified*/

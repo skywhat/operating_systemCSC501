@@ -8,6 +8,7 @@
 #include <io.h>
 #include <q.h>
 #include <stdio.h>
+#include <paging.h>
 
 /*------------------------------------------------------------------------
  * kill  --  kill a process and remove it from the system
@@ -56,6 +57,10 @@ SYSCALL kill(int pid)
 						/* fall through	*/
 	default:	pptr->pstate = PRFREE;
 	}
+	/* modified */
+	release_bs(proctab[currpid].store);
+	out_frm(currpid);
+
 	restore(ps);
 	return(OK);
 }

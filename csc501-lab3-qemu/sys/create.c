@@ -11,6 +11,8 @@
 
 LOCAL int newpid();
 
+void create_page_dir(int pid);
+
 /*------------------------------------------------------------------------
  *  create  -  create a process to start running a procedure
  *------------------------------------------------------------------------
@@ -96,6 +98,8 @@ SYSCALL create(procaddr,ssize,priority,name,nargs,args)
 	*--saddr = 0;		/* %edi */
 	*pushsp = pptr->pesp = (unsigned long)saddr;
 
+	/* modified */
+	create_page_dir(pid);
 	restore(ps);
 
 	return(pid);
@@ -117,4 +121,27 @@ LOCAL int newpid()
 			return(pid);
 	}
 	return(SYSERR);
+}
+
+
+void create_page_dir(int pid){
+	int avail_frame=0;
+	pd_t *pd_entry;
+	get_frm(&avail_frame);
+
+	proctab[pid].pdbr=(FRAME0+ avail_frame)*NBPG;
+	frm_tab[avail_frame].fr_status=FRM_MAPPED;
+	frm_tab[avail_frame].fr_type=FR_DIR;
+	frm_tab[avail_frame].fr_pid=pid;
+	pd_entry= proctab[pid].pdbr;
+	int i=0;
+	for(;i<NBPG/sizeof(pd_t);++i){/*supposed 4096/4 = 1024 */
+		pd_entry[i].pd_write=1;
+		if(i<4){
+			pd_entry[i].pd_base=FRAME0+i;
+			pd_entry[i].pd_pres=1;
+		}
+	}
+	
+
 }
