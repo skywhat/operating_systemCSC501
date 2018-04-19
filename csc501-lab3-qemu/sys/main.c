@@ -79,11 +79,65 @@ void proc1_test3(char *msg, int lck) {
 	return;
 }
 
+void proc1_test4(){
+  kprintf("\nRunning proc1_test4()\n");
+  int i,temp;
+  i=0;
+  kprintf("&i=%8x, i = %d",&i,i);
+
+  int *y;
+struct	mblock	*x;
+
+kprintf("************************************\n");
+x = vgetmem(1000);
+//x= (struct	mblock *)x;
+kprintf("x=%8x \t x->mnext=%8x \t x->mlen=%d\n",x,x->mnext,x->mlen);
+y=x;
+kprintf("&y=%x y=%x *y=%d\n",&y,y,*y);
+*y = 100;
+kprintf("&y=%x y=%x *y=%d\n",&y,y,*y);
+  y++;
+  kprintf("&y=%x y=%x *y=%d\n",&y,y,*y);
+  *y = 200;
+  kprintf("&y=%x y=%x *y=%d\n",&y,y,*y);
+  temp = *y;
+  kprintf("temp=%d\n",temp);
+kprintf("####################################\n");
+vfreemem(--y,1000);
+kprintf("\n vfreemem(x,1000); \n\n");
+
+kprintf("************************************\n");
+i = get_bs(4, 100);
+kprintf("i=%d\n",i);
+kprintf("####################################\n");
+
+xmmap(7000,4,100);
+char *addr =7000*4096;
+kprintf("&addr=%x addr=%x *addr=%c\n",&addr,addr,*addr);
+*addr = 'Y';
+kprintf("&addr=%x addr=%x *addr=%c\n",&addr,addr,*addr);
+char tem = *addr;
+kprintf("tem=%c\n",tem);
+
+xmunmap(7000);
+release_bs(4);
+kprintf("************************************\n");
+
+
+}
+
 int main()
 {
 	kprintf("\n\nHello World, Xinu@QEMU lives\n\n");
 	int pid1;
 	int pid2;
+
+  kprintf("\nRunning main()\n");
+  int i=0;
+  kprintf("&i = %8x, i = %d\n",&i,i);
+  pid1=vcreate(proc1_test4,2000,100,20,"proc1_test4",0,NULL);
+  resume(pid1);
+  sleep(5);
 
 	kprintf("\n1: shared memory\n");
 pid1 = create(proc1_test1, 2000, 20, "proc1_test1", 0, NULL);
