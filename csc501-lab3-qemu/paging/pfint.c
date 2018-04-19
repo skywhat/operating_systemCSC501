@@ -15,6 +15,7 @@ int create_page_tab(){
 	int frm_number;
 	unsigned int frm_addr;
 	get_frm(&frm_number);
+	kprintf("create page table in frm %d for pid %d\n",frm_number,currpid);
 	frm_addr=(FRAME0 + frm_number)*NBPG;
 	pt_t *pt=(pt_t *)frm_addr;
 
@@ -43,6 +44,8 @@ int create_page_tab(){
 SYSCALL pfint()
 {
  // kprintf("To be implemented!\n");
+ 	pfint_cnt++;
+	kprintf("pfint %d\n",pfint_cnt);
  	STATWORD ps;
 	disable(ps);
 
@@ -58,6 +61,7 @@ SYSCALL pfint()
 	int store,pageth;
 
 	v_addr=read_cr2();
+	kprintf("faulted address:%x\n",v_addr);
 	virt_addr=(virt_addr_t *)&v_addr;
 
 	pg_offset=virt_addr->pg_offset;
@@ -65,6 +69,7 @@ SYSCALL pfint()
 	pd_offset=virt_addr->pd_offset;
 	pdbr=proctab[currpid].pdbr;
 	pd_entry=pdbr+pd_offset*sizeof(pd_t);
+	kprintf("pd:%d pt:%d pg:%d pd_entry:%x pdbr:%x currpid:%d\n",pd_offset,pt_offset,pg_offset,pd_entry,pdbr,currpid);
 	if(pd_entry->pd_pres==0){
 		pt_new=create_page_tab();
 		pd_entry->pd_pres=1;
@@ -85,9 +90,11 @@ SYSCALL pfint()
 	}
 
 	pt_entry=(pt_t *)(pd_entry->pd_base * NBPG + pt_offset*sizeof(pt_t));
+	kprintf("pt_entry:%x\n",pt_entry);
 
 	if(pt_entry->pt_pres==0){
 		get_frm(&frm_new);
+		kprintf("allocate frame as page: %d\n",frm_new);
 		pt_entry->pt_pres=1;
 		pt_entry->pt_write=1;
 		pt_entry->pt_base=FRAME0 + frm_new;

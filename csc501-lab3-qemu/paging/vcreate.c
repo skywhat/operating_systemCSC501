@@ -52,7 +52,9 @@ SYSCALL vcreate(procaddr,ssize,hsize,priority,name,nargs,args)
 	bsm_map(pid,4096,store,hsize);
 
 	proctab[pid].vhpnpages=hsize;
-	proctab[pid].vmemlist->mnext=4096*NBPG;
+	proctab[pid].vmemlist=getmem(sizeof(struct mblock *));
+	proctab[pid].vmemlist->mnext=(struct mblock *)(4096*NBPG);
+	proctab[pid].vmemlist->mlen=0;
 
 	struct mblock *baseblock;
 	baseblock=BACKING_STORE_BASE + (store*BACKING_STORE_UNIT_SIZE);

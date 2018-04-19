@@ -47,11 +47,16 @@ char 	vers[80];
 int	console_dev;		/* the console device			*/
 
 /*  added for the demand paging */
-int page_replace_policy = SC;
+int page_replace_policy = LFU;
 
 /* modified */
 bs_map_t bsm_tab[NBS];
 fr_map_t frm_tab[NFRAMES];
+int pfint_cnt=0;
+int lfu_cnt[NFRAMES];
+int sc_acc[NFRAMES];
+int sc_ptr;
+
 
 /************************************************************************/
 /***				NOTE:				      ***/
@@ -74,6 +79,7 @@ fr_map_t frm_tab[NFRAMES];
  */
 
 void init_paging(){
+	SYSCALL pfintr();
 	int i,j;
 	/* modified */
 	init_bsm();  /* init bsm */
@@ -104,7 +110,8 @@ void init_paging(){
 		}
 	}
 	create_page_dir(NULLPROC);
-	write_cr3(proctab[NULLPROC].pdbr);
+	set_pdbr(NULLPROC);/*Set the PDBR register to the page directory for the NULL process.*/
+	set_evec(14,pfintr);		/*Install the page fault interrupt service routine.*/
 	enable_paging();
 }
 

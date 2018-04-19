@@ -93,6 +93,7 @@ SYSCALL bsm_lookup(int pid, long vaddr, int* store, int* pageth)
  */
 SYSCALL bsm_map(int pid, int vpno, int source, int npages)
 {
+	kprintf("bsm map start pid:%d vpno:0x%x source:%d npages:%d\n",pid,vpno,source,npages);
 	STATWORD ps;
 	disable(ps);
 	bsm_tab[source].bs_status=BSM_MAPPED;
@@ -105,6 +106,7 @@ SYSCALL bsm_map(int pid, int vpno, int source, int npages)
 	proctab[currpid].store=source;
 
 	restore(ps);
+	kprintf("bsm map end\n");
 	return OK;
 }
 
