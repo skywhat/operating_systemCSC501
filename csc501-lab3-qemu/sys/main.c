@@ -65,14 +65,18 @@ void proc_test2(int i,int j,int* ret,int s) {
   int bsize;
   int r;
   bsize = get_bs(i, j);
-  if (bsize != 50)
+  if (bsize != 50){
     *ret = TFAILED;
+	kprintf("Failed 1. bsize:%d\n",bsize);
+  }
   r = xmmap(MYVPNO1, i, j);
   if (j<=50 && r == SYSERR){
     *ret = TFAILED;
+	kprintf("Failed 2.\n");
   }
   if (j> 50 && r != SYSERR){
     *ret = TFAILED;
+	kprintf("Failed 3.\n");
   }
   sleep(s);
   if (r != SYSERR)
@@ -86,7 +90,7 @@ void test2() {
   int i,j;
 
   int ret = TPASSED;
-  kprintf("\nTest 2: Testing backing store operations\n");
+  kprintf("\nTest 2: Testing backing store operations pid:%d\n",currpid);
 
   int bsize = get_bs(1, 100);
   if (bsize != 100)
@@ -463,8 +467,8 @@ void test_func7()
 void test7(){
   int pid1;
   int ret = TPASSED;
-  kprintf("\nTest 7: Test FIFO page replacement policy\n");
-  srpolicy(FIFO);
+  kprintf("\nTest 7: Test SC page replacement policy\n");
+  srpolicy(SC);
   pid1 = create(test_func7, 2000, 20, "test_func7", 0, NULL);
   resume(pid1);
   sleep(10);
@@ -601,8 +605,8 @@ void test_func8_2()
 void test8(){
   int pid1;
   int ret = TPASSED;
-  kprintf("\nTest 8: Test LRU page replacement policy\n");
-  srpolicy(LRU);
+  kprintf("\nTest 8: Test LFU page replacement policy\n");
+  srpolicy(LFU);
   pid1 = create(test_func8, 2000, 20, "test_func8", 0, NULL);
   resume(pid1);
   sleep(10);
@@ -618,19 +622,19 @@ void test8(){
 int main() {
   kprintf("\n\nHello World, Xinu lives\n\n");
 
-  test1();
+  //test1();
 
-  test2();
-  /*
-  test3();
+  //test2();
+  
+  //test3();
   test4();
   test5();
   //GDB = 1;
-  test6();
-  GDB = 0;
-  test7();
+ // test6();
+ // GDB = 0;
+  //test7();
   //test8();
-  */
+  
 
   return 0;
 }

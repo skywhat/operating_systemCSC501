@@ -50,6 +50,7 @@ SYSCALL vcreate(procaddr,ssize,hsize,priority,name,nargs,args)
 	proctab[pid].vhpon=4096;
 */
 	bsm_map(pid,4096,store,hsize);
+	bsm_tab[store].bs_private=1;
 
 	proctab[pid].vhpnpages=hsize;
 	proctab[pid].vmemlist=getmem(sizeof(struct mblock *));

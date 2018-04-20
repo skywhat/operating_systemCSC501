@@ -129,7 +129,7 @@ void create_page_dir(int pid){
 	pd_t *pd_entry;
 	get_frm(&avail_frame);
 
-	kprintf("create page directory in frame %d for pid %d\n",avail_frame,pid);
+//	kprintf("create page directory in frame %d for pid %d\n",avail_frame,pid);
 
 	proctab[pid].pdbr=(FRAME0+ avail_frame)*NBPG;
 	frm_tab[avail_frame].fr_status=FRM_MAPPED;

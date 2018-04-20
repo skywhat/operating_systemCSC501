@@ -9,7 +9,7 @@ SYSCALL release_bs(bsd_t bs_id) {
   //  kprintf("To be implemented!\n");
   STATWORD ps;
   disable(ps);
-
+if(bsm_tab[bs_id].bs_mapn==0){
   bsm_tab[bs_id].bs_status=BSM_UNMAPPED;
   bsm_tab[bs_id].bs_sem=0;
   bsm_tab[bs_id].bs_pid=-1;
@@ -18,6 +18,11 @@ SYSCALL release_bs(bsd_t bs_id) {
  
   restore(ps); 
   return OK;
-
+}
+else{
+//	kprintf("release_bs pid:%d mapn:%d\n",currpid,bsm_tab[bs_id].bs_mapn);
+	restore(ps);
+	return OK;
+}
 }
 

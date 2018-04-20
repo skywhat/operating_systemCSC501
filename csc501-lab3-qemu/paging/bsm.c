@@ -21,6 +21,8 @@ SYSCALL init_bsm()
 		bsm_tab[i].bs_vpno=4096;
 		bsm_tab[i].bs_npages=0;
 		bsm_tab[i].bs_sem=0;
+		bsm_tab[i].bs_mapn=0;
+		bsm_tab[i].bs_private=0;
 	}
 
 	restore(ps);
@@ -45,7 +47,7 @@ SYSCALL get_bsm(int* avail)
 			return OK;
 		}
 	}
-	kprintf("Error. cannot find avail backing store");
+//  kprintf("Error. cannot find avail backing store");
 	restore(ps);
 	return SYSERR;
 }
@@ -93,20 +95,24 @@ SYSCALL bsm_lookup(int pid, long vaddr, int* store, int* pageth)
  */
 SYSCALL bsm_map(int pid, int vpno, int source, int npages)
 {
-	kprintf("bsm map start pid:%d vpno:0x%x source:%d npages:%d\n",pid,vpno,source,npages);
+	//kprintf("bsm map start pid:%d vpno:0x%x source:%d npages:%d\n",pid,vpno,source,npages);
 	STATWORD ps;
 	disable(ps);
+	if(bsm_tab[source].bs_status==BSM_UNMAPPED){
 	bsm_tab[source].bs_status=BSM_MAPPED;
-	bsm_tab[source].bs_pid=pid;
-	bsm_tab[source].bs_sem=1;
 	bsm_tab[source].bs_npages=npages;
+	}
+	bsm_tab[source].bs_pid=pid;
+	bsm_tab[source].bs_sem=0;
 	bsm_tab[source].bs_vpno=vpno;
+	bsm_tab[source].bs_mapn++;
+	//kprintf("bsm_map pid:%d store:%d mapn:%d\n",pid,source,bsm_tab[source].bs_mapn);
 
 	proctab[currpid].vhpno=vpno;
 	proctab[currpid].store=source;
 
 	restore(ps);
-	kprintf("bsm map end\n");
+//	kprintf("bsm map end\n");
 	return OK;
 }
 
@@ -120,22 +126,29 @@ SYSCALL bsm_unmap(int pid, int vpno, int flag)
 {
 	STATWORD ps;
 	disable(ps);
-
 	int i=0;
-	int store;
+	int store=proctab[currpid].store;
 	int pageth;
 	unsigned long vaddr=vpno*NBPG;
+
+	bsm_tab[store].bs_mapn--;
+	//kprintf("\nbsm_unmap pid:%d store:%d mapn:%d\n",pid,store,bsm_tab[store].bs_mapn);
+	//kprintf("npages: %d\n",bsm_tab[store].bs_npages);
 	for(;i<NFRAMES;++i){
 		if(frm_tab[i].fr_pid==pid && frm_tab[i].fr_type==FR_PAGE){
 			bsm_lookup(pid,vaddr,&store,&pageth);
 			write_bs((i+NFRAMES)*NBPG,store,pageth);
 		}	
 	}
-	bsm_tab[store].bs_npages=0;
-	bsm_tab[store].bs_pid=-1;
-	bsm_tab[store].bs_status=BSM_UNMAPPED;
-	bsm_tab[store].bs_vpno=4096;
-	bsm_tab[store].bs_sem=0;
+	if(bsm_tab[store].bs_mapn==0){
+		bsm_tab[store].bs_npages=0;
+		bsm_tab[store].bs_pid=-1;
+		bsm_tab[store].bs_status=BSM_UNMAPPED;
+		bsm_tab[store].bs_vpno=4096;
+		bsm_tab[store].bs_sem=0;
+		bsm_tab[store].bs_private=0;
+	}
+
 	
 	restore(ps);
 	return OK;

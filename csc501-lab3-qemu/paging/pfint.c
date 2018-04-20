@@ -106,6 +106,7 @@ SYSCALL pfint()
 		frm_tab[frm_new].fr_vpno=v_addr/NBPG;
 		
 		bsm_lookup(currpid,v_addr,&store,&pageth);
+		kprintf("looking up store:%d\n",store);
 		read_bs((char *)((FRAME0 + frm_new)*NBPG),store,pageth);
 
 		if(page_replace_policy==SC){
