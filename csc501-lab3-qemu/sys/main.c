@@ -619,22 +619,57 @@ void test8(){
   kprintf("\n\tFinished! Check error and replaced frames\n");
 }
 
+
+void proc1_test9(char *msg, int lck) {
+	char *addr;
+	int i;
+
+	get_bs(TEST1_BS, 100);
+
+	if (xmmap(PROC1_VPNO, TEST1_BS, 100) == SYSERR) {
+		kprintf("xmmap call failed\n");
+		sleep(3);
+		return;
+	}
+
+	addr = (char*) PROC1_VADDR;
+	for (i = 0; i < 26; i++) {
+		*(addr + i * NBPG) = 'A' + i;
+	}
+
+	sleep(6);
+
+	for (i = 0; i < 26; i++) {
+		kprintf("0x%08x: %c\n", addr + i * NBPG, *(addr + i * NBPG));
+	}
+
+	xmunmap(PROC1_VPNO);
+	return;
+}
+
+void test9(){
+  kprintf("\n1: shared memory\n");
+pid1 = create(proc1_test1, 2000, 20, "proc1_test1", 0, NULL);
+resume(pid1);
+sleep(5);
+}
+
 int main() {
   kprintf("\n\nHello World, Xinu lives\n\n");
 
   //test1();
 
   //test2();
-  
+
   //test3();
   test4();
-  test5();
+  //test5();
   //GDB = 1;
  // test6();
  // GDB = 0;
   //test7();
   //test8();
-  
+  test9();
 
   return 0;
 }
