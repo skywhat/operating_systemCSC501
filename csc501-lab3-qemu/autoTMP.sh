@@ -1,7 +1,7 @@
 #!/bin/bash
 
 h_files=(paging.h proc.h)
-sys_files=(initialize.c i386.c main.c create.c kill.c)
+sys_files=(initialize.c i386.c main.c create.c kill.c resched.c)
 compile_files=(Makefile)
 paging_files=(xm.c vgetmem.c vfreemem.c bsm.c release_bs.c get_bs.c vcreate.c policy.c frame.c pfint.c pfintr.S control_reg.c)
 
