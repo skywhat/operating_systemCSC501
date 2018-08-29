@@ -8,5 +8,5 @@ PA1: Process Scheduling
 
 PA2: Readers/Writer Locks with Priority Inheritance
 
-PA3: Demand Paging
+PA3: Demand Paging . (full mark!)
 
