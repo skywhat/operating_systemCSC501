@@ -10,3 +10,4 @@ PA2: Readers/Writer Locks with Priority Inheritance
 
 PA3: Demand Paging . (full mark!)
 
+https://skywhat.gitbooks.io/xinu/content/chapter1.html
